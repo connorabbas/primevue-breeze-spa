@@ -2,7 +2,7 @@ import './assets/css/app.css';
 import 'nprogress/nprogress.css';
 import 'primeicons/primeicons.css';
 
-import customizedThemePreset from '@/modules/theme-preset.mjs';
+import customizedThemePreset from '@/modules/theme-preset';
 
 import { createApp } from "vue";
 import { createPinia } from "pinia";

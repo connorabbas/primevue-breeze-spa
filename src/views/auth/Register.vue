@@ -6,7 +6,6 @@ import { useAuthStore } from '@/stores/auth';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import Checkbox from 'primevue/checkbox';
 import InputErrors from '@/components/InputErrors.vue';
-import Toast from 'primevue/toast';
 
 const toast = useToast();
 const authStore = useAuthStore();

@@ -25,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
 
     // Early return for routes that don't require authentication checks
-    if (!to.meta.requiresAuth && !to.meta.requiresUnAuth) {
+    if (!to.meta.requiresAuth && !to.meta.guestOnly) {
         next();
         return;
     }
@@ -38,7 +38,7 @@ router.beforeEach(async (to, from, next) => {
         next({ name: 'login', query: { redirect: to.fullPath } });
         return;
     }
-    if (to.meta.requiresUnAuth && authStore.user) {
+    if (to.meta.guestOnly && authStore.user) {
         next({ name: 'dashboard' });
         return;
     }

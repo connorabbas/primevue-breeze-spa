@@ -3,7 +3,7 @@ import { defineStore } from 'pinia';
 import router from '@/router';
 import axios from '@/utilities/axios';
 import progress from '@/utilities/progress';
-import apiRoutes from '@/modules/api-routes.mjs';
+import apiRoutes from '@/modules/api-routes';
 
 export const useAuthStore = defineStore('auth', () => {
     // State
