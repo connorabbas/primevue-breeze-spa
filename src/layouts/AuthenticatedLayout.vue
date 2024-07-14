@@ -11,16 +11,8 @@ import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
 
-const mainMenuItems = [
-    {
-        label: 'Home',
-        route: { name: 'home' },
-    },
-    {
-        label: 'Dashboard',
-        route: { name: 'dashboard' },
-    },
-];
+// User menu (desktop)
+const userMenu = ref(null);
 const userMenuItems = [
     {
         label: 'Profile',
@@ -33,27 +25,24 @@ const userMenuItems = [
         command: () => authStore.logout(),
     },
 ];
+const toggleUserMenu = (event) => {
+    userMenu.value.toggle(event);
+};
 
-const menu = ref(null);
+// Mobile menu (Drawer)
 const mobileMenuOpen = ref(false);
 const windowWidth = ref(window.innerWidth);
-
-function toggleUserMenu(event) {
-    menu.value.toggle(event);
-}
 const updateWidth = () => {
     windowWidth.value = window.innerWidth;
 };
-
 onMounted(() => {
     window.addEventListener('resize', updateWidth);
 });
 onUnmounted(() => {
     window.removeEventListener('resize', updateWidth);
 });
-// Watch for windowWidth changes to close sidebar on larger screens if it was opened on mobile
 watchEffect(() => {
-    if (windowWidth.value > 992) {
+    if (windowWidth.value > 768) {
         mobileMenuOpen.value = false;
     }
 });
@@ -100,7 +89,7 @@ watchEffect(() => {
                                 <Menu
                                     :model="userMenuItems"
                                     popup
-                                    ref="menu"
+                                    ref="userMenu"
                                     class="shadow"
                                 >
                                     <template #item="{ item, props }">
@@ -135,7 +124,7 @@ watchEffect(() => {
                                     severity="secondary"
                                     @click="toggleUserMenu($event)"
                                 >
-                                    <span class="">User Name</span>
+                                    <span>{{ authStore.user.name }}</span>
                                     <i class="pi pi-angle-down ml-1"></i>
                                 </Button>
                             </div>

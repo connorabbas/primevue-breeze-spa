@@ -1,75 +1,84 @@
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import router from '@/router';
 import axios from '@/utilities/axios';
 import progress from '@/utilities/progress';
 import apiRoutes from '@/modules/api-routes.mjs';
 
-export const useAuthStore = defineStore('auth', {
-    state: () => ({
-        authUser: null,
-    }),
-    getters: {
-        user: (state) => state.authUser,
-    },
-    actions: {
-        getUser() {
-            return axios
-                .get(apiRoutes.user)
-                .then((response) => {
-                    this.authUser = response.data;
-                })
-                .catch((error) => {
-                    if (error.response && error.response.status == 401) {
-                        this.authUser = null;
-                    }
+export const useAuthStore = defineStore('auth', () => {
+    // State
+    const user = ref(null);
+
+    // Getters
+    // const foo = computed(() => 'bar');
+
+    // Actions
+    function getUser() {
+        return axios
+            .get(apiRoutes.user)
+            .then((response) => {
+                user.value = response.data;
+            })
+            .catch((error) => {
+                if (error.response && error.response.status == 401) {
+                    user.value = null;
+                }
+            });
+    }
+    function getCsrfCookie() {
+        return axios.get(apiRoutes.sanctumCsrfCookie);
+    }
+    function loginRedirect() {
+        const redirect = router.currentRoute.value.query.redirect;
+        if (redirect) {
+            router.push({ path: redirect });
+        } else {
+            router.push({ name: 'dashboard' });
+        }
+    }
+    function login(formData) {
+        progress.start();
+        return getCsrfCookie()
+            .then(() => {
+                return axios.post(apiRoutes.auth.login, formData).then((response) => {
+                    loginRedirect();
                 });
-        },
-        getCsrfCookie() {
-            return axios.get(apiRoutes.sanctumCsrfCookie);
-        },
-        loginRedirect() {
-            const redirect = router.currentRoute.value.query.redirect;
-            if (redirect) {
-                router.push({ path: redirect });
-            } else {
-                router.push({ name: 'dashboard' });
-            }
-        },
-        login(formData) {
-            // fetching CSRF cookie not necessarily needed since we are pinging the user endpoint prior
-            progress.start();
-            return this.getCsrfCookie()
-                .then(() => {
-                    return axios.post(apiRoutes.auth.login, formData).then((response) => {
-                        this.loginRedirect();
-                    });
-                })
-                .finally(() => {
-                    progress.done();
-                });
-        },
-        register(formData) {
-            progress.start();
-            return axios
-                .post(apiRoutes.auth.register, formData)
-                .then((response) => {
-                    this.loginRedirect();
-                })
-                .finally(() => {
-                    progress.done();
-                });
-        },
-        logout() {
-            progress.start();
-            return axios
-                .post(apiRoutes.auth.logout)
-                .then((response) => {
-                    this.authUser = null;
-                    router.push({ name: 'home' });
-                })
-                .finally(() => {
-                    progress.done();
-                });
-        },
-    },
+            })
+            .finally(() => {
+                progress.done();
+            });
+    }
+    function register(formData) {
+        progress.start();
+        return axios
+            .post(apiRoutes.auth.register, formData)
+            .then((response) => {
+                loginRedirect();
+            })
+            .finally(() => {
+                progress.done();
+            });
+    }
+    function logout() {
+        progress.start();
+        return axios
+            .post(apiRoutes.auth.logout)
+            .then((response) => {
+                user.value = null;
+                router.push({ name: 'home' });
+            })
+            .finally(() => {
+                progress.done();
+            });
+    }
+
+    return {
+        user,
+        getUser,
+        getCsrfCookie,
+        loginRedirect,
+        login,
+        register,
+        logout,
+    };
 });

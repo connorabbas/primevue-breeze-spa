@@ -6,7 +6,7 @@ import GuestLayout from "@/layouts/GuestLayout.vue";
     <GuestLayout>
         <main>
             <div>
-                <h1>404 - Not found</h1>
+                <h1 class="text-2xl text-center">404 - Not found</h1>
             </div>
         </main>
     </GuestLayout>

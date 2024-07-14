@@ -6,7 +6,6 @@ import ResponsiveCard from '@/components/ResponsiveCard.vue';
 <template>
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
         <div>
-            <!-- TODO: Router Link -->
             <RouterLink to="/">
                 <ApplicationLogo class="w-20 h-20 fill-current text-surface-900 dark:text-surface-0" />
             </RouterLink>

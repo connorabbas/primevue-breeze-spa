@@ -1,10 +1,8 @@
-import HomeView from '../views/Home.vue';
-
 const webRoutes = [
     {
         path: '/',
         name: 'home',
-        component: HomeView,
+        component: () => import('@/views/Home.vue'),
     },
     {
         path: '/dashboard',
