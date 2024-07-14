@@ -5,7 +5,6 @@ import ResponsiveCard from '@/components/ResponsiveCard.vue';
 </script>
 
 <template>
-    <Head title="Dashboard" />
     <AuthenticatedLayout>
         <template #header>
             <h2 class="font-bold text-xl leading-tight">Dashboard</h2>

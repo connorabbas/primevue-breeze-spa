@@ -8,7 +8,7 @@ const basePath = import.meta.env.VITE_BASE_ROUTE_PATH;
 const router = createRouter({
     history: createWebHistory(basePath),
     base: basePath,
-    linkActiveClass: 'text-primary',
+    //linkActiveClass: '',
     routes: [
         ...authRoutes,
         ...webRoutes,

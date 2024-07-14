@@ -24,31 +24,14 @@ const mainMenuItems = [
 const userMenuItems = [
     {
         label: 'Profile',
-        route: { name: 'profile' },
         icon: 'pi pi-fw pi-user',
+        route: { name: 'profile' },
     },
     {
         label: 'Log Out',
-        callFunction: () => authStore.logout(),
         icon: 'pi pi-fw pi-sign-out',
+        command: () => authStore.logout(),
     },
-];
-const mobileMenuItems = [
-    {
-        label: 'Dashboard',
-        route: { name: 'dashboard' },
-        icon: 'pi pi-fw pi-home',
-    },
-    {
-        label: 'Profile',
-        route: { name: 'profile' },
-        icon: 'pi pi-fw pi-user',
-    },
-    /* {
-        label: "Log Out",
-        callFunction: () => logout(),
-        icon: "pi pi-fw pi-sign-out",
-    }, */
 ];
 
 const menu = ref(null);
@@ -102,11 +85,7 @@ watchEffect(() => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 md:-my-px md:ms-10 md:flex">
-                                <NavLink
-                                    href="/dashboard"
-                                >
-                                    Dashboard
-                                </NavLink>
+                                <NavLink href="/dashboard"> Dashboard </NavLink>
                             </div>
                         </div>
 
@@ -121,26 +100,36 @@ watchEffect(() => {
                                 <Menu
                                     :model="userMenuItems"
                                     popup
-                                    ref="userMenu"
+                                    ref="menu"
                                     class="shadow"
                                 >
                                     <template #item="{ item, props }">
-                                        <!-- <Link
-                                            :href="item.href"
-                                            :method="item.method === 'post' ? 'post' : 'get'"
-                                            :as="item.method === 'post' ? 'li' : 'a'"
-                                            class="p-menu-item-link"
-                                            :class="{
-                                                'flex items-center w-full text-left': item.method === 'post',
-                                            }"
+                                        <RouterLink
+                                            v-if="item.route"
+                                            v-slot="{ href, navigate }"
+                                            :to="item.route"
                                             custom
                                         >
-                                            <span
-                                                v-show="item.icon"
-                                                :class="[item.icon]"
-                                            />
-                                            <span>{{ item.label }}</span>
-                                        </Link> -->
+                                            <a
+                                                v-ripple
+                                                :href="href"
+                                                v-bind="props.action"
+                                                @click="navigate"
+                                            >
+                                                <span :class="item.icon" />
+                                                <span class="ml-2">{{ item.label }}</span>
+                                            </a>
+                                        </RouterLink>
+                                        <a
+                                            v-else
+                                            v-ripple
+                                            :href="item.url"
+                                            :target="item.target"
+                                            v-bind="props.action"
+                                        >
+                                            <span :class="item.icon" />
+                                            <span class="ml-2">{{ item.label }}</span>
+                                        </a>
                                     </template>
                                 </Menu>
                                 <Button
@@ -184,9 +173,7 @@ watchEffect(() => {
                     <div>
                         <ul class="list-none p-0 m-0 overflow-hidden">
                             <li>
-                                <MobileNavLink
-                                    href="/dashboard"
-                                >
+                                <MobileNavLink href="/dashboard">
                                     <i class="pi pi-home mr-2"></i>
                                     <span class="font-medium">Dashboard</span>
                                 </MobileNavLink>
@@ -198,7 +185,7 @@ watchEffect(() => {
                     <template #footer>
                         <div class="flex items-center gap-2">
                             <RouterLink
-                                to=""
+                                to="/profile"
                                 class="flex-auto"
                             >
                                 <Button

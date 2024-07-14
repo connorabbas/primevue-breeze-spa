@@ -15,7 +15,7 @@ const webRoutes = [
     {
         path: '/profile',
         name: 'profile',
-        component: () => import('@/views/user/Profile.vue'),
+        component: () => import('@/views/profile/Edit.vue'),
         meta: { requiresAuth: true },
     },
 ];
