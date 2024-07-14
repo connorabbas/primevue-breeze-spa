@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import router from '@/router';
-import axios from '@/modules/axios.mjs';
+import axios from '@/utilities/axios';
+import progress from '@/utilities/progress';
 import apiRoutes from '@/modules/api-routes.mjs';
-import progress from '@/modules/progress.mjs';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -60,10 +60,16 @@ export const useAuthStore = defineStore('auth', {
                 });
         },
         logout() {
-            return axios.post(apiRoutes.auth.logout).then((response) => {
-                this.authUser = null;
-                router.push({ name: 'home' });
-            });
+            progress.start();
+            return axios
+                .post(apiRoutes.auth.logout)
+                .then((response) => {
+                    this.authUser = null;
+                    router.push({ name: 'home' });
+                })
+                .finally(() => {
+                    progress.done();
+                });
         },
     },
 });

@@ -1,4 +1,4 @@
-import './css/app.css';
+import './assets/css/app.css';
 import 'nprogress/nprogress.css';
 import 'primeicons/primeicons.css';
 

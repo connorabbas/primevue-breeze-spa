@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import progress from '@/utilities/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
-import progress from '@/modules/progress.mjs';
 
 const basePath = import.meta.env.VITE_BASE_ROUTE_PATH;
 const router = createRouter({

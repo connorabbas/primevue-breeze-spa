@@ -111,7 +111,6 @@ watchEffect(() => {
                                             custom
                                         >
                                             <a
-                                                v-ripple
                                                 :href="href"
                                                 v-bind="props.action"
                                                 @click="navigate"
@@ -122,7 +121,6 @@ watchEffect(() => {
                                         </RouterLink>
                                         <a
                                             v-else
-                                            v-ripple
                                             :href="item.url"
                                             :target="item.target"
                                             v-bind="props.action"

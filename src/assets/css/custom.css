@@ -7,3 +7,7 @@ body {
     margin: 0 !important;
     padding: 0 !important;
 }
+
+#nprogress .bar {
+    background: var(--p-primary-500) !important;
+}
