@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import axios from '@/axios';
 import router from '@/router';
+import axios from '@/modules/axios.mjs';
 import apiRoutes from '@/modules/api-routes.mjs';
+import progress from '@/modules/progress.mjs';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -36,16 +37,27 @@ export const useAuthStore = defineStore('auth', {
         },
         login(formData) {
             // fetching CSRF cookie not necessarily needed since we are pinging the user endpoint prior
-            return this.getCsrfCookie().then(() => {
-                return axios.post(apiRoutes.auth.login, formData).then((response) => {
-                    this.loginRedirect();
+            progress.start();
+            return this.getCsrfCookie()
+                .then(() => {
+                    return axios.post(apiRoutes.auth.login, formData).then((response) => {
+                        this.loginRedirect();
+                    });
+                })
+                .finally(() => {
+                    progress.done();
                 });
-            });
         },
         register(formData) {
-            return axios.post(apiRoutes.auth.register, formData).then((response) => {
-                this.loginRedirect();
-            });
+            progress.start();
+            return axios
+                .post(apiRoutes.auth.register, formData)
+                .then((response) => {
+                    this.loginRedirect();
+                })
+                .finally(() => {
+                    progress.done();
+                });
         },
         logout() {
             return axios.post(apiRoutes.auth.logout).then((response) => {

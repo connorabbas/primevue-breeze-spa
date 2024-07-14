@@ -1,8 +1,8 @@
-import NProgress from 'nprogress';
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import authRoutes from './auth';
 import webRoutes from './web';
+import progress from '@/modules/progress.mjs';
 
 const basePath = import.meta.env.VITE_BASE_ROUTE_PATH;
 const router = createRouter({
@@ -21,7 +21,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    NProgress.start();
+    progress.start();
     const authStore = useAuthStore();
 
     // Early return for routes that don't require authentication checks
@@ -47,7 +47,7 @@ router.beforeEach(async (to, from, next) => {
 });
 
 router.afterEach(() => {
-    NProgress.done();
+    progress.done();
 });
 
 export default router;
