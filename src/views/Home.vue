@@ -1,4 +1,6 @@
-<script setup></script>
+<script setup>
+import ToggleThemeButton from '@/components/ToggleThemeButton.vue';
+</script>
 
 <template>
     <main>
@@ -22,6 +24,7 @@
                 >
                 <RouterLink :to="{ name: 'register' }">Register</RouterLink>
             </nav>
+            <ToggleThemeButton />
         </div>
     </main>
 </template>
