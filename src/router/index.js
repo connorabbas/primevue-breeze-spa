@@ -4,7 +4,7 @@ import progress from '@/utilities/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
 
-const basePath = import.meta.env.VITE_BASE_ROUTE_PATH;
+const basePath = import.meta.env.VITE_BASE_ROUTE_PATH ?? '/';
 const router = createRouter({
     history: createWebHistory(basePath),
     base: basePath,
