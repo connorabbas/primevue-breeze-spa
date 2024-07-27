@@ -12,9 +12,12 @@ export default defineConfig({
     },
     server: {
         host: true,
-        port: 8000, // adjust as needed, match docker-compose.yml values
+        port: 8000, // adjust as needed, match docker-compose.yml port values, same for below
         watch: {
             usePolling: true,
         },
+    },
+    preview: {
+        port: 8000,
     },
 });
