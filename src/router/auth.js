@@ -11,6 +11,12 @@ const authRoutes = [
         component: () => import('@/views/auth/Register.vue'),
         meta: { guestOnly: true },
     },
+    {
+        path: '/forgot-password',
+        name: 'forgotPassword',
+        component: () => import('@/views/auth/ForgotPassword.vue'),
+        meta: { guestOnly: true },
+    },
 ];
 
 export default authRoutes;

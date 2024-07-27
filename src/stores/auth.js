@@ -81,6 +81,16 @@ export const useAuthStore = defineStore('auth', () => {
                 progress.done();
             });
     }
+    function requestPasswordResetLink(formData) {
+        progress.start();
+        return getCsrfCookie()
+            .then(() => {
+                return axios.post(apiRoutes.auth.forgotPassword, formData);
+            })
+            .finally(() => {
+                progress.done();
+            });
+    }
     function logout() {
         progress.start();
         return axios
@@ -99,6 +109,7 @@ export const useAuthStore = defineStore('auth', () => {
         getUser,
         getCsrfCookie,
         loginRedirect,
+        requestPasswordResetLink,
         login,
         register,
         logout,

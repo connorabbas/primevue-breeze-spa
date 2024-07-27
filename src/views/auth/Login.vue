@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive } from 'vue';
 import { useErrorHandling } from '@/composables/useErrorHandling';
-import { useToast } from 'primevue/usetoast';
 import { useAuthStore } from '@/stores/auth';
+import { useToast } from 'primevue/usetoast';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import Checkbox from 'primevue/checkbox';
 import InputErrors from '@/components/InputErrors.vue';
@@ -50,6 +50,7 @@ function submit() {
 
 <template>
     <GuestLayout>
+        <!-- TODO -->
         <!-- <template
             #message
             v-if="status"
@@ -122,14 +123,13 @@ function submit() {
             </div>
 
             <div class="flex justify-end items-center">
-                <!-- TODO -->
-                <!-- <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
+                <!-- TODO: v-if="canResetPassword" -->
+                <RouterLink
+                    :to="{ name: 'forgotPassword' }"
                     class="mr-4 underline text-muted-color hover:text-color"
                 >
                     Forgot your password?
-                </Link> -->
+                </RouterLink>
                 <Button
                     raised
                     type="submit"

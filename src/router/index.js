@@ -25,6 +25,7 @@ router.beforeEach(async (to, from, next) => {
     const authStore = useAuthStore();
 
     // Early return for routes that don't require authentication checks
+    // Note: Will need to call authStore.getUser() on views/routes that need to check/use the authStore.user
     if (!to.meta.requiresAuth && !to.meta.guestOnly) {
         next();
         return;
