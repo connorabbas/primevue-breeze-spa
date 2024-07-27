@@ -1,11 +1,12 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useToast } from 'primevue/usetoast';
+import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAuthStore } from '@/stores/auth';
 import Message from 'primevue/message';
 import InputErrors from '@/components/InputErrors.vue';
-import { useAuthStore } from '@/stores/auth';
 
+// TODO
 defineProps({
     mustVerifyEmail: {
         type: Boolean,

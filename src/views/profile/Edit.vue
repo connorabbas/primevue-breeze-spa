@@ -35,13 +35,13 @@ const props = defineProps({
                         />
                     </ResponsiveCard>
 
-                    <!-- <ResponsiveCard>
+                    <ResponsiveCard>
                         <UpdatePasswordForm class="max-w-xl" />
                     </ResponsiveCard>
 
                     <ResponsiveCard>
                         <DeleteUserForm class="max-w-xl" />
-                    </ResponsiveCard> -->
+                    </ResponsiveCard>
                 </div>
             </div>
         </Container>
