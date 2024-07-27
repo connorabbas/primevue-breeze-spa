@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     function authError() {
         user.value = null;
+        toast.removeAllGroups(); // prevent multiple of the same toast from popping up
         toast.add({
             severity: 'error',
             summary: 'Authentication Error',
@@ -21,7 +22,6 @@ export const useAuthStore = defineStore('auth', () => {
         });
     }
     function getUser() {
-        // invalidate/check the user for every page visit
         return axios
             .get(apiRoutes.user)
             .then((response) => {
@@ -32,14 +32,18 @@ export const useAuthStore = defineStore('auth', () => {
                     response.data?.name &&
                     response.data?.email
                 ) {
-                    console.log(response.status, response.data);
                     user.value = response.data;
                 } else {
                     authError();
                 }
             })
             .catch((error) => {
-                authError();
+                if (error.response && error.response.status == 401) {
+                    // endpoint is fine, user is unauthorized
+                    user.value = null;
+                } else {
+                    authError();
+                }
             });
     }
     function getCsrfCookie() {
