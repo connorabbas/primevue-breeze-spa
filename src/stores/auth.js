@@ -4,25 +4,42 @@ import router from '@/router';
 import axios from '@/utilities/axios';
 import progress from '@/utilities/progress';
 import apiRoutes from '@/modules/api-routes';
+import { useToast } from 'primevue/usetoast';
 
 export const useAuthStore = defineStore('auth', () => {
-    // State
+    const toast = useToast();
+
     const user = ref(null);
 
-    // Getters
-    // const foo = computed(() => 'bar');
-
-    // Actions
+    function authError() {
+        user.value = null;
+        toast.add({
+            severity: 'error',
+            summary: 'Authentication Error',
+            detail: 'An unexpected error occurred, please try again later.',
+            life: 3000,
+        });
+    }
     function getUser() {
+        // invalidate/check the user for every page visit
         return axios
             .get(apiRoutes.user)
             .then((response) => {
-                user.value = response.data;
+                if (
+                    response.status >= 200 &&
+                    response.status < 300 &&
+                    response.data?.id &&
+                    response.data?.name &&
+                    response.data?.email
+                ) {
+                    console.log(response.status, response.data);
+                    user.value = response.data;
+                } else {
+                    authError();
+                }
             })
             .catch((error) => {
-                if (error.response && error.response.status == 401) {
-                    user.value = null;
-                }
+                authError();
             });
     }
     function getCsrfCookie() {

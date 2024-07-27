@@ -11,6 +11,8 @@ initSiteTheme();
     <!-- Use key to re-generate the page view component on each navigation :key="$route.path" -->
     <!-- Alteratively, use a watch() on each component to re-render dynamic data as needed -->
     <!-- TODO: router view inside layout views to have sidebar/nav preserve state -->
-    <Toast />
+    <Teleport to="body">
+        <Toast />
+    </Teleport>
     <RouterView />
 </template>

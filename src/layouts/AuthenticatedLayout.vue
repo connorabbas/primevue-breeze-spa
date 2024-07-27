@@ -12,7 +12,7 @@ import { useAuthStore } from '@/stores/auth';
 const authStore = useAuthStore();
 
 // User menu (desktop)
-const userMenu = ref(null);
+const userMenu = ref();
 const userMenuItems = [
     {
         label: 'Profile',
@@ -124,7 +124,7 @@ watchEffect(() => {
                                     severity="secondary"
                                     @click="toggleUserMenu($event)"
                                 >
-                                    <span>{{ authStore.user.name }}</span>
+                                    <span>{{ authStore?.user?.name }}</span>
                                     <i class="pi pi-angle-down ml-1"></i>
                                 </Button>
                             </div>

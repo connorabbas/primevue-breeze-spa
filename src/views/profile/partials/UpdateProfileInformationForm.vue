@@ -19,7 +19,7 @@ const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
 
-const nameInput = ref(null);
+const nameInput = ref();
 
 const form = reactive({
     processing: false,
@@ -43,7 +43,7 @@ const updateProfileInformation = () => {
 };
 
 onMounted(() => {
-    nameInput.value.$el.focus();
+   nameInput.value.$el.focus();
 });
 </script>
 

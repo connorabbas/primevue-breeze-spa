@@ -55,7 +55,6 @@ function submit() {
                     >Name</label
                 >
                 <InputText
-                    ref="nameInput"
                     id="name"
                     type="text"
                     v-model="form.data.name"
