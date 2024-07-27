@@ -11,6 +11,10 @@ export default defineConfig({
         },
     },
     server: {
-        host: 'vue.breeze-api.test',
+        host: true,
+        port: 8000, // adjust as needed, match docker-compose.yml values
+        watch: {
+            usePolling: true,
+        },
     },
 });

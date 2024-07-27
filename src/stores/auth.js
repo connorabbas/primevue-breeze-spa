@@ -50,10 +50,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
     function register(formData) {
         progress.start();
-        return axios
-            .post(apiRoutes.auth.register, formData)
-            .then((response) => {
-                loginRedirect();
+        return getCsrfCookie()
+            .then(() => {
+                return axios.post(apiRoutes.auth.register, formData).then((response) => {
+                    loginRedirect();
+                });
             })
             .finally(() => {
                 progress.done();

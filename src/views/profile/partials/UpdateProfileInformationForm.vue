@@ -38,12 +38,12 @@ const showSuccessToast = () => {
     });
 };
 const updateProfileInformation = () => {
-    // TODO axios logic
+    // Breeze API installation does not include profile related routes/functionality, implement as needed...
+    showSuccessToast();
 };
 
 onMounted(() => {
     nameInput.value.$el.focus();
-    showSuccessToast();
 });
 </script>
 

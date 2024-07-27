@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  primevue_breeze_spa:
+    build: .
+    container_name: primevue_breeze_spa
+    entrypoint: /bin/sh
+    ports:
+      - 8000:8000
+    working_dir: /srv/app
+    volumes:
+      - type: bind
+        source: ./
+        target: /srv/app
+    tty: true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.primevue_breeze_spa.rule=Host(`vue.breeze-api.test`)"
+      - "traefik.http.services.primevue_breeze_spa.loadbalancer.server.port=8000"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: "traefik_network"

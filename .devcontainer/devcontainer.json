@@ -1,0 +1,29 @@
+// https://aka.ms/devcontainer.json
+{
+	"name": "PrimeVue Breeze SPA",
+	"dockerComposeFile": [
+		"../docker-compose.yml"
+	],
+	"service": "primevue_breeze_spa",
+	"workspaceFolder": "/srv/app",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"eamodio.gitlens",
+				"esbenp.prettier-vscode",
+				"mikestead.dotenv",
+				"streetsidesoftware.code-spell-checker",
+				"hollowtree.vue-snippets",
+				"Vue.volar"
+			],
+			"settings": {
+                "terminal.integrated.shell.linux": "/bin/sh"
+            }
+		}
+	}
+    // "remoteUser": "node"
+	// "postCreateCommand": "npm install"
+	// "forwardPorts": [],
+	// "runServices": [],
+	// "shutdownAction": "none",
+}
