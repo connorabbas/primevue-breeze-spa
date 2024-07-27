@@ -17,6 +17,13 @@ const authRoutes = [
         component: () => import('@/views/auth/ForgotPassword.vue'),
         meta: { guestOnly: true },
     },
+    {
+        path: '/password-reset/:token',
+        name: 'passwordReset',
+        component: () => import('@/views/auth/ResetPassword.vue'),
+        props: true,
+        meta: { guestOnly: true },
+    },
 ];
 
 export default authRoutes;

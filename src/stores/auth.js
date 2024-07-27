@@ -10,6 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     const toast = useToast();
 
     const user = ref(null);
+    const statusMessage = ref(null);
 
     function authError() {
         user.value = null;
@@ -61,9 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
         progress.start();
         return getCsrfCookie()
             .then(() => {
-                return axios.post(apiRoutes.auth.login, formData).then((response) => {
-                    loginRedirect();
-                });
+                return axios.post(apiRoutes.auth.login, formData);
             })
             .finally(() => {
                 progress.done();
@@ -73,9 +72,7 @@ export const useAuthStore = defineStore('auth', () => {
         progress.start();
         return getCsrfCookie()
             .then(() => {
-                return axios.post(apiRoutes.auth.register, formData).then((response) => {
-                    loginRedirect();
-                });
+                return axios.post(apiRoutes.auth.register, formData);
             })
             .finally(() => {
                 progress.done();
@@ -86,6 +83,16 @@ export const useAuthStore = defineStore('auth', () => {
         return getCsrfCookie()
             .then(() => {
                 return axios.post(apiRoutes.auth.forgotPassword, formData);
+            })
+            .finally(() => {
+                progress.done();
+            });
+    }
+    function resetPassword(formData) {
+        progress.start();
+        return getCsrfCookie()
+            .then(() => {
+                return axios.post(apiRoutes.auth.resetPassword, formData);
             })
             .finally(() => {
                 progress.done();
@@ -106,10 +113,12 @@ export const useAuthStore = defineStore('auth', () => {
 
     return {
         user,
+        statusMessage,
         getUser,
         getCsrfCookie,
         loginRedirect,
         requestPasswordResetLink,
+        resetPassword,
         login,
         register,
         logout,

@@ -9,9 +9,8 @@ import InputErrors from '@/components/InputErrors.vue';
 
 const toast = useToast();
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
+const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
-const status = ref(null);
 const emailInput = ref();
 
 const form = reactive({
@@ -21,15 +20,21 @@ const form = reactive({
     },
 });
 
+const showErrorToast = () => {
+    toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'An unexpected error occurred, please try again later.',
+        life: 3000,
+    });
+};
 function submit() {
-    status.value = null;
     form.processing = true;
     authStore
         .requestPasswordResetLink(form.data)
         .then((response) => {
-            // success, handle the status message
-            status.value = response.data.status
             clearErrors();
+            authStore.statusMessage = response.data.status
         })
         .catch((error) => {
             handleAxiosError(error);
@@ -50,9 +55,9 @@ onMounted(() => {
 <template>
     <GuestLayout>
 
-        <template #message v-if="status">
+        <template #message v-if="authStore.statusMessage">
             <Message severity="success" :closable="false" class="shadow">
-                {{ status }}
+                {{ authStore.statusMessage }}
             </Message>
         </template>
 

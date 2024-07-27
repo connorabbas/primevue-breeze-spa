@@ -1,20 +1,32 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useToast } from 'primevue/usetoast';
+import { useRoute } from 'vue-router';
+import router from '@/router';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
+const props = defineProps({
+    token: {
+        type: String,
+        required: true,
+    },
+});
+
+const route = useRoute();
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
+const emailInput = ref();
+
 const form = reactive({
     processing: false,
     data: {
-        name: '',
-        email: '',
+        token: props.token,
+        email: route.query?.email ?? '',
         password: '',
         password_confirmation: '',
     },
@@ -28,13 +40,15 @@ const showErrorToast = () => {
         life: 3000,
     });
 };
-function submit() {
+const submit = () => {
     form.processing = true;
     authStore
-        .register(form.data)
+        .resetPassword(form.data)
         .then((response) => {
             clearErrors();
-            loginRedirect();
+            router.push({ name: 'login' }).then(() => {
+                authStore.statusMessage = response.data.status;
+            });
         })
         .catch((error) => {
             handleAxiosError(error);
@@ -45,7 +59,11 @@ function submit() {
         .finally(() => {
             form.processing = false;
         });
-}
+};
+
+onMounted(() => {
+    emailInput.value.$el.focus();
+});
 </script>
 
 <template>
@@ -53,38 +71,18 @@ function submit() {
         <form @submit.prevent="submit">
             <div class="mb-6">
                 <label
-                    for="name"
-                    class="block mb-2"
-                    >Name</label
-                >
-                <InputText
-                    id="name"
-                    type="text"
-                    v-model="form.data.name"
-                    class="w-full"
-                    :invalid="Boolean(errors.validation?.name)"
-                    required
-                    autocomplete="name"
-                />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.name"
-                />
-            </div>
-
-            <div class="mb-6">
-                <label
                     for="email"
                     class="block mb-2"
                     >Email</label
                 >
                 <InputText
+                    required
+                    ref="emailInput"
                     id="email"
                     type="email"
                     v-model="form.data.email"
                     class="w-full"
                     :invalid="Boolean(errors.validation?.email)"
-                    required
                     autocomplete="username"
                 />
                 <InputErrors
@@ -97,7 +95,7 @@ function submit() {
                 <label
                     for="password"
                     class="block mb-2"
-                    >Password</label
+                    >New Password</label
                 >
                 <InputText
                     id="password"
@@ -109,7 +107,7 @@ function submit() {
                     autocomplete="new-password"
                 />
                 <InputErrors
-                    class="mt-2"
+                    class="mt-2 mb-1"
                     :errors="errors.validation?.password"
                 />
             </div>
@@ -118,7 +116,7 @@ function submit() {
                 <label
                     for="password_confirmation"
                     class="block mb-2"
-                    >Confirm Password</label
+                    >Confirm New Password</label
                 >
                 <InputText
                     id="password_confirmation"
@@ -130,23 +128,17 @@ function submit() {
                     autocomplete="new-password"
                 />
                 <InputErrors
-                    class="mt-2"
+                    class="mt-2 mb-1"
                     :errors="errors.validation?.password_confirmation"
                 />
             </div>
 
             <div class="flex justify-end items-center">
-                <RouterLink
-                    :to="{ name: 'login' }"
-                    class="mr-4 text-muted-color underline text-muted-color hover:text-color"
-                >
-                    Already registered?
-                </RouterLink>
                 <Button
                     raised
                     type="submit"
                     :loading="form.processing"
-                    label="Register"
+                    label="Reset Password"
                     severity="contrast"
                 />
             </div>

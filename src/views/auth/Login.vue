@@ -6,10 +6,11 @@ import { useToast } from 'primevue/usetoast';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import Checkbox from 'primevue/checkbox';
 import InputErrors from '@/components/InputErrors.vue';
+import Message from 'primevue/message';
 
 const toast = useToast();
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
+const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
 const form = reactive({
     processing: false,
@@ -32,6 +33,10 @@ function submit() {
     form.processing = true;
     authStore
         .login(form.data)
+        .then((response) => {
+            clearErrors();
+            authStore.loginRedirect();
+        })
         .catch((error) => {
             handleAxiosError(error);
             if (errors.critical || errors.other) {
@@ -40,29 +45,24 @@ function submit() {
         })
         .finally(() => {
             form.processing = false;
-            // TODO
-            /* if (hasNoErrors) {
-                clearErrors();
-            } */
         });
 }
 </script>
 
 <template>
     <GuestLayout>
-        <!-- TODO -->
-        <!-- <template
+        <template
             #message
-            v-if="status"
+            v-if="authStore.statusMessage"
         >
             <Message
                 severity="success"
                 :closable="false"
                 class="shadow"
             >
-                {{ status }}
+                {{ authStore.statusMessage }}
             </Message>
-        </template> -->
+        </template>
 
         <form @submit.prevent="submit">
             <div class="mb-6">
@@ -123,7 +123,6 @@ function submit() {
             </div>
 
             <div class="flex justify-end items-center">
-                <!-- TODO: v-if="canResetPassword" -->
                 <RouterLink
                     :to="{ name: 'forgotPassword' }"
                     class="mr-4 underline text-muted-color hover:text-color"
