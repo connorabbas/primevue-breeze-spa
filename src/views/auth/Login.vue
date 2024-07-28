@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -12,6 +12,8 @@ const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
+const emailInput = ref();
+
 const form = reactive({
     processing: false,
     data: {
@@ -21,15 +23,7 @@ const form = reactive({
     },
 });
 
-const showErrorToast = () => {
-    toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'An unexpected error occurred, please try again later.',
-        life: 3000,
-    });
-};
-function submit() {
+const submit = () => {
     form.processing = true;
     authStore
         .login(form.data)
@@ -40,13 +34,22 @@ function submit() {
         .catch((error) => {
             handleAxiosError(error);
             if (errors.critical || errors.other) {
-                showErrorToast();
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'An unexpected error occurred, please try again later.',
+                    life: 3000,
+                });
             }
         })
         .finally(() => {
             form.processing = false;
         });
-}
+};
+
+onMounted(() => {
+    emailInput.value.$el.focus();
+});
 </script>
 
 <template>

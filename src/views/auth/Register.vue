@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -9,6 +9,8 @@ import InputErrors from '@/components/InputErrors.vue';
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
+
+const nameInput = ref();
 
 const form = reactive({
     processing: false,
@@ -20,15 +22,7 @@ const form = reactive({
     },
 });
 
-const showErrorToast = () => {
-    toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'An unexpected error occurred, please try again later.',
-        life: 3000,
-    });
-};
-function submit() {
+const submit = () => {
     form.processing = true;
     authStore
         .register(form.data)
@@ -39,7 +33,12 @@ function submit() {
         .catch((error) => {
             handleAxiosError(error);
             if (errors.critical || errors.other) {
-                showErrorToast();
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'An unexpected error occurred, please try again later.',
+                    life: 3000,
+                });
             }
         })
         .finally(() => {
@@ -47,7 +46,9 @@ function submit() {
         });
 }
 
-// TODO: focus on input
+onMounted(() => {
+    nameInput.value.$el.focus();
+});
 </script>
 
 <template>
@@ -60,6 +61,7 @@ function submit() {
                     >Name</label
                 >
                 <InputText
+                    ref="nameInput"
                     id="name"
                     type="text"
                     v-model="form.data.name"

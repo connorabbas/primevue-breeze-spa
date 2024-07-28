@@ -5,17 +5,6 @@ import ResponsiveCard from '@/components/ResponsiveCard.vue';
 import DeleteUserForm from './partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './partials/UpdateProfileInformationForm.vue';
-
-const props = defineProps({
-    auth: Object,
-    mustVerifyEmail: {
-        type: Boolean,
-        default: false,
-    },
-    status: {
-        type: String,
-    },
-});
 </script>
 
 <template>
@@ -28,11 +17,7 @@ const props = defineProps({
             <div class="py-12">
                 <div class="space-y-6">
                     <ResponsiveCard>
-                        <UpdateProfileInformationForm
-                            :must-verify-email="mustVerifyEmail"
-                            :status="status"
-                            class="max-w-xl"
-                        />
+                        <UpdateProfileInformationForm class="max-w-xl" />
                     </ResponsiveCard>
 
                     <ResponsiveCard>

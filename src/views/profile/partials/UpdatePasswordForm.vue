@@ -21,17 +21,14 @@ const form = reactive({
     },
 });
 
-const showSuccessToast = () => {
+const updatePassword = () => {
+    // Breeze API installation does not include profile related routes/functionality, implement as needed...
     toast.add({
         severity: 'success',
         summary: 'Saved',
         detail: 'Your password has been updated',
         life: 3000,
     });
-};
-const updatePassword = () => {
-    // Breeze API installation does not include profile related routes/functionality, implement as needed...
-    showSuccessToast();
 };
 </script>
 

@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed } from 'vue';
+import { ref, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useAuthStore } from '@/stores/auth';
 import { useErrorHandling } from '@/composables/useErrorHandling';
@@ -10,35 +10,29 @@ const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
-const form = reactive({
-    processing: false,
-    data: {},
-});
+const processing = ref(false);
 
-const showErrorToast = () => {
-    toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'An unexpected error occurred, please try again later.',
-        life: 3000,
-    });
-};
+const verificationLinkSent = computed(() => authStore.statusMessage === 'verification-link-sent');
+
 const submit = () => {
-    form.processing = true;
+    processing.value = true;
     authStore
         .sendVerificationEmail()
         .catch((error) => {
             handleAxiosError(error);
             if (errors.critical || errors.other) {
-                showErrorToast();
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'An unexpected error occurred, please try again later.',
+                    life: 3000,
+                });
             }
         })
         .finally(() => {
-            form.processing = false;
+            processing.value = false;
         });
 };
-
-const verificationLinkSent = computed(() => authStore.statusMessage === 'verification-link-sent');
 </script>
 
 <template>
@@ -66,7 +60,7 @@ const verificationLinkSent = computed(() => authStore.statusMessage === 'verific
                 <Button
                     raised
                     type="submit"
-                    :loading="form.processing"
+                    :loading="processing"
                     label="Resend Verification Email"
                     severity="contrast"
                 />

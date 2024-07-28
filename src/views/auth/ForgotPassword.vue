@@ -20,15 +20,7 @@ const form = reactive({
     },
 });
 
-const showErrorToast = () => {
-    toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'An unexpected error occurred, please try again later.',
-        life: 3000,
-    });
-};
-function submit() {
+const submit = () => {
     form.processing = true;
     authStore
         .requestPasswordResetLink(form.data)
@@ -39,7 +31,12 @@ function submit() {
         .catch((error) => {
             handleAxiosError(error);
             if (errors.critical || errors.other) {
-                showErrorToast();
+                toast.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'An unexpected error occurred, please try again later.',
+                    life: 3000,
+                });
             }
         })
         .finally(() => {

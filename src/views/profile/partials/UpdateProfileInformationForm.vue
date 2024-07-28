@@ -20,8 +20,8 @@ const form = reactive({
     },
 });
 
-// TODO: consolidate toasts
-const showSuccessToast = () => {
+const updateProfileInformation = () => {
+    // Breeze API installation does not include profile related routes/functionality, implement as needed...
     toast.add({
         severity: 'success',
         summary: 'Saved',
@@ -29,23 +29,16 @@ const showSuccessToast = () => {
         life: 3000,
     });
 };
-const showErrorToast = () => {
-    toast.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'An unexpected error occurred, please try again later.',
-        life: 3000,
-    });
-};
-const updateProfileInformation = () => {
-    // Breeze API installation does not include profile related routes/functionality, implement as needed...
-    showSuccessToast();
-};
 const resendVerifyEmail = () => {
     authStore.sendVerificationEmail().catch((error) => {
         handleAxiosError(error);
         if (errors.critical || errors.other) {
-            showErrorToast();
+            toast.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'An unexpected error occurred, please try again later.',
+                life: 3000,
+            });
         }
     });
 };
