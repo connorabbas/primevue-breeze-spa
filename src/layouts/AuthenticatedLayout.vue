@@ -1,5 +1,6 @@
 <script setup>
-import { ref, onMounted, onUnmounted, watchEffect } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
+import { useRoute } from 'vue-router';
 import Drawer from 'primevue/drawer';
 import Menu from 'primevue/menu';
 import ApplicationLogo from '@/components/ApplicationLogo.vue';
@@ -10,6 +11,9 @@ import ToggleThemeButton from '@/components/ToggleThemeButton.vue';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
+
+const route = useRoute();
+const currentRouteName = computed(() => route.name);
 
 // User menu (desktop)
 const userMenu = ref();
@@ -74,7 +78,12 @@ watchEffect(() => {
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 md:-my-px md:ms-10 md:flex">
-                                <NavLink href="/dashboard"> Dashboard </NavLink>
+                                <NavLink
+                                    href="/dashboard"
+                                    :active="currentRouteName == 'dashboard'"
+                                >
+                                    Dashboard
+                                </NavLink>
                             </div>
                         </div>
 
