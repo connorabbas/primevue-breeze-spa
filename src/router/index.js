@@ -25,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
     progress.start();
     const authStore = useAuthStore();
 
-    // Cession status message
+    // Session status message
     authStore.statusMessage = null;
 
     // Early return for routes that don't require authentication checks
@@ -45,7 +45,6 @@ router.beforeEach(async (to, from, next) => {
         to.meta.requiresAuth &&
         !authStore.user.email_verified_at
     ) {
-        // avoid looped request
         if (to.name !== 'verifyEmail') {
             next({ name: 'verifyEmail' });
         } else {
