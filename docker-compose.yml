@@ -6,7 +6,7 @@ services:
     container_name: primevue_breeze_spa
     entrypoint: /bin/sh
     ports:
-      - 8000:8000
+      - 8000:80
     working_dir: /srv/app
     volumes:
       - type: bind

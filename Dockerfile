@@ -16,8 +16,8 @@ RUN npm install
 # Copy the rest of the application code to the container
 COPY . .
 
-# Expose port 8000
-EXPOSE 8000
+# Expose port 80
+EXPOSE 80
 
 # Set the default command
 CMD ["sh"]
