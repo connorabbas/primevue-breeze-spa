@@ -1,7 +1,7 @@
 # Laravel Breeze & PrimeVue
 A [PrimeVue](https://primevue.org/) SPA starter kit meant for use with a [Laravel Breeze](https://laravel.com/docs/master/starter-kits#laravel-breeze) API stack backend.
 
-An alternative to: https://github.com/connorabbas/primevue-breeze-intertia
+An alternative to: https://github.com/connorabbas/primevue-breeze-inertia
 
 ## Setup 
 1. Clone the repo (or download the zip)
