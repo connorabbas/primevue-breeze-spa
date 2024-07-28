@@ -1,10 +1,9 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
+import { useToast } from 'primevue/usetoast';
 import router from '@/router';
 import axios from '@/utilities/axios';
 import progress from '@/utilities/progress';
-import apiRoutes from '@/modules/api-routes';
-import { useToast } from 'primevue/usetoast';
 
 export const useAuthStore = defineStore('auth', () => {
     const toast = useToast();
@@ -24,7 +23,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
     function getUser() {
         return axios
-            .get(apiRoutes.user)
+            .get('/api/user')
             .then((response) => {
                 if (
                     response.status >= 200 &&
@@ -48,7 +47,7 @@ export const useAuthStore = defineStore('auth', () => {
             });
     }
     function getCsrfCookie() {
-        return axios.get(apiRoutes.sanctumCsrfCookie);
+        return axios.get('/sanctum/csrf-cookie');
     }
     function loginRedirect() {
         const redirect = router.currentRoute.value.query.redirect;
@@ -62,7 +61,7 @@ export const useAuthStore = defineStore('auth', () => {
         progress.start();
         return getCsrfCookie()
             .then(() => {
-                return axios.post(apiRoutes.auth.login, formData);
+                return axios.post('/login', formData);
             })
             .finally(() => {
                 progress.done();
@@ -72,7 +71,7 @@ export const useAuthStore = defineStore('auth', () => {
         progress.start();
         return getCsrfCookie()
             .then(() => {
-                return axios.post(apiRoutes.auth.register, formData);
+                return axios.post('/register', formData);
             })
             .finally(() => {
                 progress.done();
@@ -82,7 +81,7 @@ export const useAuthStore = defineStore('auth', () => {
         progress.start();
         return getCsrfCookie()
             .then(() => {
-                return axios.post(apiRoutes.auth.forgotPassword, formData);
+                return axios.post('/forgot-password', formData);
             })
             .finally(() => {
                 progress.done();
@@ -92,19 +91,19 @@ export const useAuthStore = defineStore('auth', () => {
         progress.start();
         return getCsrfCookie()
             .then(() => {
-                return axios.post(apiRoutes.auth.resetPassword, formData);
+                return axios.post('/reset-password', formData);
             })
             .finally(() => {
                 progress.done();
             });
     }
     function sendVerificationEmail() {
-        return axios.post(apiRoutes.auth.sendVerificationEmail);
+        return axios.post('/email/verification-notification');
     }
     function logout() {
         progress.start();
         return axios
-            .post(apiRoutes.auth.logout)
+            .post('/logout')
             .then((response) => {
                 user.value = null;
                 router.push({ name: 'home' });
