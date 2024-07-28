@@ -38,8 +38,7 @@ router.beforeEach(async (to, from, next) => {
     await authStore.getUser();
 
     // Auth checks
-    // Remove this first check if not concerned with User email verification
-    if (
+    /* if (
         to.meta.requiresAuth &&
         to.meta.verifiedAuth &&
         authStore.mustVerifyEmail &&
@@ -51,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
             next();
         }
         return;
-    }
+    } */
     if (to.meta.requiresAuth && !authStore.user) {
         next({ name: 'login', query: { redirect: to.fullPath } });
         return;

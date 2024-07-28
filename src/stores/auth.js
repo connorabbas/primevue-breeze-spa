@@ -8,7 +8,7 @@ import progress from '@/utilities/progress';
 export const useAuthStore = defineStore('auth', () => {
     const toast = useToast();
 
-    const mustVerifyEmail = true;
+    const mustVerifyEmail = false;
     const user = ref(null);
     const statusMessage = ref(null);
 

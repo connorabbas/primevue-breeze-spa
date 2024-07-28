@@ -64,14 +64,13 @@ const submit = () => {
                     label="Resend Verification Email"
                     severity="contrast"
                 />
-
-                <!-- TODO -->
-                <!-- <Link
-                    :href="route('logout')"
-                    method="post"
+                <a
+                    @click="authStore.logout()"
+                    href="#"
                     class="text-muted-color underline text-muted-color hover:text-color"
-                    >Log Out</Link
-                > -->
+                >
+                    Log Out
+                </a>
             </div>
         </form>
     </GuestLayout>
