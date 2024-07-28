@@ -171,30 +171,30 @@ watchEffect(() => {
                     </div>
                     <template #footer>
                         <div class="flex items-center gap-2">
-                            <RouterLink
-                                to="/profile"
-                                class="flex-auto"
-                            >
+                            <div class="grow">
+                                <RouterLink
+                                    :to="{ name: 'profile' }"
+                                    class="flex-auto"
+                                >
+                                    <Button
+                                        label="Profile"
+                                        icon="pi pi-user"
+                                        class="w-full"
+                                        severity="secondary"
+                                        outlined
+                                    ></Button>
+                                </RouterLink>
+                            </div>
+                            <div class="grow">
                                 <Button
-                                    label="Profile"
-                                    icon="pi pi-user"
-                                    class="w-full"
-                                    severity="secondary"
-                                    outlined
-                                ></Button>
-                            </RouterLink>
-                            <RouterLink
-                                to=""
-                                class="flex-auto"
-                            >
-                                <Button
+                                    @click="authStore.logout()"
                                     label="Logout"
                                     icon="pi pi-sign-out"
                                     class="w-full"
                                     severity="danger"
                                     text
                                 ></Button>
-                            </RouterLink>
+                            </div>
                         </div>
                     </template>
                 </Drawer>
