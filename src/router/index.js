@@ -5,7 +5,6 @@ import authRoutes from './auth';
 import webRoutes from './web';
 
 const basePath = import.meta.env.VITE_BASE_ROUTE_PATH ?? '/';
-const verifiedUsersOnly = true;
 const router = createRouter({
     history: createWebHistory(basePath),
     base: basePath,
@@ -41,9 +40,10 @@ router.beforeEach(async (to, from, next) => {
     // Auth checks
     // Remove this first check if not concerned with User email verification
     if (
-        verifiedUsersOnly &&
         to.meta.requiresAuth &&
-        !authStore.user.email_verified_at
+        to.meta.verifiedAuth &&
+        authStore.mustVerifyEmail &&
+        authStore.user.email_verified_at === null
     ) {
         if (to.name !== 'verifyEmail') {
             next({ name: 'verifyEmail' });

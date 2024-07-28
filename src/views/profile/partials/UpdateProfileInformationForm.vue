@@ -6,16 +6,6 @@ import { useAuthStore } from '@/stores/auth';
 import Message from 'primevue/message';
 import InputErrors from '@/components/InputErrors.vue';
 
-// TODO
-defineProps({
-    mustVerifyEmail: {
-        type: Boolean,
-    },
-    status: {
-        type: String,
-    },
-});
-
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
@@ -30,6 +20,7 @@ const form = reactive({
     },
 });
 
+// TODO: consolidate toasts
 const showSuccessToast = () => {
     toast.add({
         severity: 'success',
@@ -38,13 +29,29 @@ const showSuccessToast = () => {
         life: 3000,
     });
 };
+const showErrorToast = () => {
+    toast.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'An unexpected error occurred, please try again later.',
+        life: 3000,
+    });
+};
 const updateProfileInformation = () => {
     // Breeze API installation does not include profile related routes/functionality, implement as needed...
     showSuccessToast();
 };
+const resendVerifyEmail = () => {
+    authStore.sendVerificationEmail().catch((error) => {
+        handleAxiosError(error);
+        if (errors.critical || errors.other) {
+            showErrorToast();
+        }
+    });
+};
 
 onMounted(() => {
-   nameInput.value.$el.focus();
+    nameInput.value.$el.focus();
 });
 </script>
 
@@ -101,21 +108,20 @@ onMounted(() => {
                 />
             </div>
 
-            <div v-if="mustVerifyEmail && user.email_verified_at === null">
+            <div v-if="authStore.mustVerifyEmail && authStore.user.email_verified_at === null">
                 <p class="text-sm mt-2">
                     Your email address is unverified.
-                    <!-- TODO -->
-                    <!-- <Link
-                        :href="route('verification.send')"
-                        method="post"
+                    <a
+                        href="#"
+                        @click="resendVerifyEmail"
                         class="underline text-sm text-muted-color underline text-muted-color hover:text-color"
                     >
                         Click here to re-send the verification email.
-                    </Link> -->
+                    </a>
                 </p>
 
                 <Message
-                    v-if="status === 'verification-link-sent'"
+                    v-if="authStore.statusMessage === 'verification-link-sent'"
                     severity="success"
                     :closable="false"
                     class="shadow mt-4"

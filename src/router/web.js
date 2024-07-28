@@ -8,7 +8,7 @@ const webRoutes = [
         path: '/dashboard',
         name: 'dashboard',
         component: () => import('@/views/Dashboard.vue'),
-        meta: { requiresAuth: true },
+        meta: { requiresAuth: true, verifiedAuth: true },
     },
     {
         path: '/profile',

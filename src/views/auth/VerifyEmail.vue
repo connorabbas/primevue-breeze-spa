@@ -27,10 +27,6 @@ const submit = () => {
     form.processing = true;
     authStore
         .sendVerificationEmail()
-        .then((response) => {
-            clearErrors();
-            authStore.statusMessage = response.data.status;
-        })
         .catch((error) => {
             handleAxiosError(error);
             if (errors.critical || errors.other) {

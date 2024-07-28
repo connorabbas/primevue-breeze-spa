@@ -8,6 +8,7 @@ import progress from '@/utilities/progress';
 export const useAuthStore = defineStore('auth', () => {
     const toast = useToast();
 
+    const mustVerifyEmail = true;
     const user = ref(null);
     const statusMessage = ref(null);
 
@@ -98,7 +99,9 @@ export const useAuthStore = defineStore('auth', () => {
             });
     }
     function sendVerificationEmail() {
-        return axios.post('/email/verification-notification');
+        return axios.post('/email/verification-notification').then((response) => {
+            statusMessage.value = response.data.status;
+        });
     }
     function logout() {
         progress.start();
@@ -114,6 +117,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
 
     return {
+        mustVerifyEmail,
         user,
         statusMessage,
         getUser,
