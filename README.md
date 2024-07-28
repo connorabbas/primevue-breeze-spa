@@ -13,7 +13,7 @@ An alternative to: https://github.com/connorabbas/primevue-breeze-intertia
         ```
         # Remember, your SPA and API must share the same top-level domain
         # Example implementation, could also use localhost with different port numbers
-        APP_URL=http://breeze-api.test # Match this value with VITE_API_BASE_URL in the Vue app
+        APP_URL="http://breeze-api.test" # Match this value with VITE_API_BASE_URL in the Vue app
         FRONTEND_URL="http://vue.breeze-api.test"
         SANCTUM_STATEFUL_DOMAINS="vue.breeze-api.test"
         SESSION_DOMAIN=".breeze-api.test"
