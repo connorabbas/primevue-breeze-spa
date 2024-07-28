@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
-import { useToast } from 'primevue/usetoast';
 import Message from 'primevue/message';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';

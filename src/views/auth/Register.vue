@@ -1,8 +1,8 @@
 <script setup>
 import { ref, reactive } from 'vue';
+import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
-import { useToast } from 'primevue/usetoast';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
@@ -46,6 +46,8 @@ function submit() {
             form.processing = false;
         });
 }
+
+// TODO: focus on input
 </script>
 
 <template>

@@ -5,6 +5,7 @@ import authRoutes from './auth';
 import webRoutes from './web';
 
 const basePath = import.meta.env.VITE_BASE_ROUTE_PATH ?? '/';
+const verifiedUsersOnly = true;
 const router = createRouter({
     history: createWebHistory(basePath),
     base: basePath,
@@ -24,7 +25,7 @@ router.beforeEach(async (to, from, next) => {
     progress.start();
     const authStore = useAuthStore();
 
-    // session status message
+    // Cession status message
     authStore.statusMessage = null;
 
     // Early return for routes that don't require authentication checks
@@ -34,10 +35,24 @@ router.beforeEach(async (to, from, next) => {
         return;
     }
 
-    // check valid user/session
+    // Check valid user/session
     await authStore.getUser();
 
-    // proceed with the regular auth checks
+    // Auth checks
+    // Remove this first check if not concerned with User email verification
+    if (
+        verifiedUsersOnly &&
+        to.meta.requiresAuth &&
+        !authStore.user.email_verified_at
+    ) {
+        // avoid looped request
+        if (to.name !== 'verifyEmail') {
+            next({ name: 'verifyEmail' });
+        } else {
+            next();
+        }
+        return;
+    }
     if (to.meta.requiresAuth && !authStore.user) {
         next({ name: 'login', query: { redirect: to.fullPath } });
         return;

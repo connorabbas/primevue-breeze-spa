@@ -98,6 +98,9 @@ export const useAuthStore = defineStore('auth', () => {
                 progress.done();
             });
     }
+    function sendVerificationEmail() {
+        return axios.post(apiRoutes.auth.sendVerificationEmail);
+    }
     function logout() {
         progress.start();
         return axios
@@ -119,6 +122,7 @@ export const useAuthStore = defineStore('auth', () => {
         loginRedirect,
         requestPasswordResetLink,
         resetPassword,
+        sendVerificationEmail,
         login,
         register,
         logout,

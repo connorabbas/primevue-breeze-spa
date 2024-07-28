@@ -24,6 +24,12 @@ const authRoutes = [
         props: true,
         meta: { guestOnly: true },
     },
+    {
+        path: '/verify-email',
+        name: 'verifyEmail',
+        component: () => import('@/views/auth/VerifyEmail.vue'),
+        meta: { requiresAuth: true },
+    },
 ];
 
 export default authRoutes;

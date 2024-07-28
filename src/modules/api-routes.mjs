@@ -7,6 +7,7 @@ const routes = Object.freeze({
         register: '/register',
         forgotPassword: '/forgot-password',
         resetPassword: '/reset-password',
+        sendVerificationEmail: '/email/verification-notification',
     },
 });
 
