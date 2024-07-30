@@ -12,7 +12,15 @@ export const useAuthStore = defineStore('auth', () => {
     const user = ref(null);
     const statusMessage = ref(null);
 
-    function authError() {
+    function loginRedirect() {
+        const redirect = router.currentRoute.value.query.redirect;
+        if (redirect) {
+            router.push({ path: redirect });
+        } else {
+            router.push({ name: 'dashboard' });
+        }
+    }
+    function getUserError() {
         user.value = null;
         toast.removeAllGroups(); // prevent multiple of the same toast from popping up
         toast.add({
@@ -35,7 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
                 ) {
                     user.value = response.data;
                 } else {
-                    authError();
+                    getUserError();
                 }
             })
             .catch((error) => {
@@ -43,20 +51,12 @@ export const useAuthStore = defineStore('auth', () => {
                     // endpoint is fine, user is unauthorized
                     user.value = null;
                 } else {
-                    authError();
+                    getUserError();
                 }
             });
     }
     function getCsrfCookie() {
         return axios.get('/sanctum/csrf-cookie');
-    }
-    function loginRedirect() {
-        const redirect = router.currentRoute.value.query.redirect;
-        if (redirect) {
-            router.push({ path: redirect });
-        } else {
-            router.push({ name: 'dashboard' });
-        }
     }
     function login(formData) {
         progress.start();

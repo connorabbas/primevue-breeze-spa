@@ -3,8 +3,9 @@ import { useAuthStore } from '@/stores/auth';
 import progress from '@/utilities/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
+import middlewareMap from '@/router/middleware/map';
 
-const basePath = import.meta.env.VITE_BASE_ROUTE_PATH ?? '/';
+const basePath = import.meta.env.VITE_BASE_PATH ?? '/';
 const router = createRouter({
     history: createWebHistory(basePath),
     base: basePath,
@@ -21,42 +22,23 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     progress.start();
+
+    // Context for middleware functions
     const authStore = useAuthStore();
+    const context = { to, from, authStore };
 
-    // Session status message
-    authStore.statusMessage = null;
-
-    // Early return for routes that don't require authentication checks
-    // Note: Will need to call authStore.getUser() on views/routes that need to check/use the authStore.user
-    if (!to.meta.requiresAuth && !to.meta.guestOnly) {
-        next();
-        return;
-    }
-
-    // Check valid user/session
-    await authStore.getUser();
-
-    // Auth checks
-    /* if (
-        to.meta.requiresAuth &&
-        to.meta.verifiedAuth &&
-        authStore.mustVerifyEmail &&
-        authStore.user.email_verified_at === null
-    ) {
-        if (to.name !== 'verifyEmail') {
-            next({ name: 'verifyEmail' });
-        } else {
-            next();
+    // Run middleware pipeline based on route meta
+    const middlewareNames = to.meta.middleware || [];
+    const middlewares = middlewareNames.map((name) => middlewareMap[name]).filter(Boolean);
+    if (middlewares.length > 0) {
+        for (const middlewareResult of middlewares) {
+            const result = await middlewareResult(context);
+            // only use next() here in the router, avoid weird external promise behavior
+            if (result && result.next) {
+                next(result.next);
+                return;
+            }
         }
-        return;
-    } */
-    if (to.meta.requiresAuth && !authStore.user) {
-        next({ name: 'login', query: { redirect: to.fullPath } });
-        return;
-    }
-    if (to.meta.guestOnly && authStore.user) {
-        next({ name: 'dashboard' });
-        return;
     }
 
     next();

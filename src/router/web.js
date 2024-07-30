@@ -8,13 +8,13 @@ const webRoutes = [
         path: '/dashboard',
         name: 'dashboard',
         component: () => import('@/views/Dashboard.vue'),
-        meta: { requiresAuth: true, verifiedAuth: true },
+        meta: { middleware: ['auth', 'verified'] },
     },
     {
         path: '/profile',
         name: 'profile',
         component: () => import('@/views/profile/Edit.vue'),
-        meta: { requiresAuth: true },
+        meta: { middleware: ['auth'] },
     },
 ];
 
