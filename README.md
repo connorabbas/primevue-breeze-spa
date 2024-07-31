@@ -7,17 +7,16 @@ An alternative to: https://github.com/connorabbas/primevue-breeze-inertia
 1. Clone the repo (or download the zip)
 2. Create a new `.env` file in the root directory, reference the `.env.example` file for the vars/values
 3. Create a [new Laravel application](https://laravel.com/docs/master/installation) 
-    1. Install [Laravel Breeze](https://laravel.com/docs/master/starter-kits#laravel-breeze-installation) using the [API Stack](https://laravel.com/docs/master/starter-kits#breeze-and-next) option
-
-    2. Setup necessary `.env` configuration values
-        ```
-        # Remember, your SPA and API must share the same top-level domain
-        # Example implementation, could also use localhost with different port numbers
-        APP_URL="http://breeze-api.test" # Match this value with VITE_API_BASE_URL in the Vue app
-        FRONTEND_URL="http://vue.breeze-api.test"
-        SANCTUM_STATEFUL_DOMAINS="vue.breeze-api.test"
-        SESSION_DOMAIN=".breeze-api.test"
-        ```
+4. Install [Laravel Breeze](https://laravel.com/docs/master/starter-kits#laravel-breeze-installation) using the [API Stack](https://laravel.com/docs/master/starter-kits#breeze-and-next) option
+5. Setup necessary `.env` configuration values in the Laravel API project
+    ```
+    # Remember, your SPA and API must share the same top-level domain
+    # Example implementation, could also use localhost with different port numbers
+    APP_URL="http://breeze-api.test" # Match this value with VITE_API_BASE_URL in the Vue app
+    FRONTEND_URL="http://vue.breeze-api.test"
+    SANCTUM_STATEFUL_DOMAINS="vue.breeze-api.test"
+    SESSION_DOMAIN=".breeze-api.test"
+    ```
 
 ## Theme
 This starter kit provides a light/dark mode and custom theme functionality provided by the powerful PrimeVue theming system, using styled mode and custom design token values.
