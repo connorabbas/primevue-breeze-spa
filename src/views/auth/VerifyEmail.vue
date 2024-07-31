@@ -3,16 +3,18 @@ import { ref, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useAuthStore } from '@/stores/auth';
 import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import Message from 'primevue/message';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
+const { flashMessages } = useFlashMessage();
 
 const processing = ref(false);
 
-const verificationLinkSent = computed(() => authStore.statusMessage === 'verification-link-sent');
+const verificationLinkSent = computed(() => flashMessages.success === 'verification-link-sent');
 
 const submit = () => {
     processing.value = true;

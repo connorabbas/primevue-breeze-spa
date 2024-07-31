@@ -3,6 +3,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
+import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import Checkbox from 'primevue/checkbox';
 import InputErrors from '@/components/InputErrors.vue';
@@ -11,6 +12,7 @@ import Message from 'primevue/message';
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
+const { flashMessages } = useFlashMessage();
 
 const emailInput = ref();
 
@@ -56,14 +58,14 @@ onMounted(() => {
     <GuestLayout>
         <template
             #message
-            v-if="authStore.statusMessage"
+            v-if="flashMessages.success"
         >
             <Message
                 severity="success"
                 :closable="false"
                 class="shadow"
             >
-                {{ authStore.statusMessage }}
+                {{ flashMessages.success }}
             </Message>
         </template>
 

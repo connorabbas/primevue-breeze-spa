@@ -1,16 +1,20 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
+import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import Message from 'primevue/message';
 import InputErrors from '@/components/InputErrors.vue';
 
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
+const { flashMessages } = useFlashMessage();
 
 const nameInput = ref();
+
+const verificationLinkSent = computed(() => flashMessages.success === 'verification-link-sent');
 
 const form = reactive({
     processing: false,
@@ -114,7 +118,7 @@ onMounted(() => {
                 </p>
 
                 <Message
-                    v-if="authStore.statusMessage === 'verification-link-sent'"
+                    v-if="verificationLinkSent"
                     severity="success"
                     :closable="false"
                     class="shadow mt-4"

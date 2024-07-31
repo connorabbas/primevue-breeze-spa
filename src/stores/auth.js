@@ -1,16 +1,17 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useToast } from 'primevue/usetoast';
+import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import router from '@/router';
 import axios from '@/utilities/axios';
 import progress from '@/utilities/progress';
 
 export const useAuthStore = defineStore('auth', () => {
     const toast = useToast();
+    const { setFlashMessage } = useFlashMessage();
 
     const mustVerifyEmail = false;
     const user = ref(null);
-    const statusMessage = ref(null);
 
     function loginRedirect() {
         const redirect = router.currentRoute.value.query.redirect;
@@ -100,7 +101,7 @@ export const useAuthStore = defineStore('auth', () => {
     }
     function sendVerificationEmail() {
         return axios.post('/email/verification-notification').then((response) => {
-            statusMessage.value = response.data.status;
+            setFlashMessage('success', response.data.status);
         });
     }
     function logout() {
@@ -119,7 +120,6 @@ export const useAuthStore = defineStore('auth', () => {
     return {
         mustVerifyEmail,
         user,
-        statusMessage,
         getUser,
         getCsrfCookie,
         loginRedirect,

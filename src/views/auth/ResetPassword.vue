@@ -4,6 +4,7 @@ import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useRoute } from 'vue-router';
+import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import router from '@/router';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
@@ -19,6 +20,7 @@ const route = useRoute();
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
+const { setFlashMessage } = useFlashMessage();
 
 const emailInput = ref();
 
@@ -39,7 +41,7 @@ const submit = () => {
         .then((response) => {
             clearErrors();
             router.push({ name: 'login' }).then(() => {
-                authStore.statusMessage = response.data.status;
+                setFlashMessage('success', response.data.status);
             });
         })
         .catch((error) => {

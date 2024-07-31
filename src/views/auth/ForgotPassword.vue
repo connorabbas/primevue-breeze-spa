@@ -3,6 +3,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
+import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import Message from 'primevue/message';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
@@ -10,6 +11,7 @@ import InputErrors from '@/components/InputErrors.vue';
 const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
+const { flashMessages, setFlashMessage } = useFlashMessage();
 
 const emailInput = ref();
 
@@ -26,7 +28,7 @@ const submit = () => {
         .requestPasswordResetLink(form.data)
         .then((response) => {
             clearErrors();
-            authStore.statusMessage = response.data.status
+            setFlashMessage('success', response.data.status);
         })
         .catch((error) => {
             handleAxiosError(error);
@@ -42,7 +44,7 @@ const submit = () => {
         .finally(() => {
             form.processing = false;
         });
-}
+};
 
 onMounted(() => {
     emailInput.value.$el.focus();
@@ -51,22 +53,31 @@ onMounted(() => {
 
 <template>
     <GuestLayout>
-
-        <template #message v-if="authStore.statusMessage">
-            <Message severity="success" :closable="false" class="shadow">
-                {{ authStore.statusMessage }}
+        <template
+            #message
+            v-if="flashMessages.success"
+        >
+            <Message
+                severity="success"
+                :closable="false"
+                class="shadow"
+            >
+                {{ flashMessages.success }}
             </Message>
         </template>
 
         <div class="mb-6 text-sm text-muted-color">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will allow
-            you to choose a new one.
+            Forgot your password? No problem. Just let us know your email address and we will email you a password reset
+            link that will allow you to choose a new one.
         </div>
 
         <form @submit.prevent="submit">
             <div class="mb-6">
-                <label for="email" class="block mb-2">Email</label>
+                <label
+                    for="email"
+                    class="block mb-2"
+                    >Email</label
+                >
                 <InputText
                     required
                     ref="emailInput"
