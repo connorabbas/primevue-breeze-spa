@@ -3,6 +3,8 @@ A [PrimeVue](https://primevue.org/) SPA starter kit meant for use with a [Larave
 
 An alternative to: https://github.com/connorabbas/primevue-breeze-inertia
 
+![image](https://github.com/user-attachments/assets/83e597ee-1724-4364-8bc2-f2642fd36c5e)
+
 ## Setup 
 1. Clone the repo (or download the zip)
 2. Create a new `.env` file in the root directory, reference the `.env.example` file for the vars/values
