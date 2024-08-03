@@ -11,7 +11,6 @@ import ToggleThemeButton from '@/components/ToggleThemeButton.vue';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
-
 const route = useRoute();
 const currentRouteName = computed(() => route.name);
 

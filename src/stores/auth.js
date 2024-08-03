@@ -27,7 +27,7 @@ export const useAuthStore = defineStore('auth', () => {
         toast.add({
             severity: 'error',
             summary: 'Authentication Error',
-            detail: 'An unexpected error occurred, please try again later.',
+            detail: 'Unable to reach the authentication server, please try again later.',
             life: 3000,
         });
     }

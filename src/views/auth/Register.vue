@@ -28,7 +28,7 @@ const submit = () => {
         .register(form.data)
         .then((response) => {
             clearErrors();
-            loginRedirect();
+            authStore.loginRedirect();
         })
         .catch((error) => {
             handleAxiosError(error);
