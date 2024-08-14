@@ -19,8 +19,8 @@ const verificationLinkSent = computed(() => flashMessages.success === 'verificat
 const form = reactive({
     processing: false,
     data: {
-        name: '',
-        email: '',
+        name: authStore.user.name || '',
+        email: authStore.user.email || '',
     },
 });
 
@@ -74,7 +74,7 @@ onMounted(() => {
                     ref="nameInput"
                     id="name"
                     type="text"
-                    v-model="form.name"
+                    v-model="form.data.name"
                     class="w-full"
                     :invalid="Boolean(errors.validation?.name)"
                     autocomplete="name"
@@ -94,7 +94,7 @@ onMounted(() => {
                     required
                     id="email"
                     type="email"
-                    v-model="form.email"
+                    v-model="form.data.email"
                     class="w-full"
                     :invalid="Boolean(errors.validation?.email)"
                     autocomplete="username"
