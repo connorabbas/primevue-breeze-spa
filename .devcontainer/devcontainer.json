@@ -14,7 +14,8 @@
 				"mikestead.dotenv",
 				"streetsidesoftware.code-spell-checker",
 				"hollowtree.vue-snippets",
-				"Vue.volar"
+				"Vue.volar",
+				"yzhang.markdown-all-in-one"
 			],
 			"settings": {
                 "terminal.integrated.shell.linux": "/bin/sh"

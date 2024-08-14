@@ -1,7 +1,7 @@
 import Aura from '@primevue/themes/aura';
 import { definePreset } from '@primevue/themes';
 
-const presetOptions = {
+const customThemePreset = definePreset(Aura, {
     semantic: {
         primary: {
             50: '{indigo.50}',
@@ -49,8 +49,15 @@ const presetOptions = {
             },
         },
     },
+});
+
+export default {
+    preset: customThemePreset,
+    options: {
+        darkModeSelector: '.dark-mode',
+        cssLayer: {
+            name: 'primevue',
+            order: 'tailwind-base, primevue, tailwind-utilities',
+        },
+    },
 };
-
-const themePreset = definePreset(Aura, presetOptions); // Customize an existing theme preset
-
-export default themePreset;
