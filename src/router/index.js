@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 import progress from '@/utilities/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
-import middlewareMap from '@/router/middleware/map';
+import middlewareMap from '@/middleware';
 
 const basePath = import.meta.env.VITE_BASE_PATH ?? '/';
 const router = createRouter({
