@@ -3,8 +3,6 @@ export default async function (context) {
     await authStore.getUser();
 
     if (authStore.user) {
-        return {
-            next: { name: 'dashboard' },
-        };
+        return { name: 'dashboard' };
     }
 };

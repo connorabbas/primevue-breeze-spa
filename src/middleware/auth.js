@@ -3,8 +3,6 @@ export default async function (context) {
     await authStore.getUser();
 
     if (!authStore.user) {
-        return {
-            next: { name: 'login', query: { redirect: to.fullPath } },
-        };
+        return { name: 'login', query: { redirect: to.fullPath } };
     }
 }

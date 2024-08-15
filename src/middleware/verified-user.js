@@ -4,9 +4,7 @@ export default async function (context) {
 
     if (authStore.mustVerifyEmail && authStore.user && authStore.user.email_verified_at === null) {
         if (to.name !== 'verifyEmail') {
-            return {
-                next: { name: 'verifyEmail' },
-            };
+            return { name: 'verifyEmail' };
         }
     }
 };
