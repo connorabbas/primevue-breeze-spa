@@ -74,8 +74,6 @@ export const useAuthStore = defineStore('auth', () => {
         user,
         getUser,
         getCsrfCookie,
-        requestPasswordResetLink,
-        resetPassword,
         sendVerificationEmail,
         logout,
     };
