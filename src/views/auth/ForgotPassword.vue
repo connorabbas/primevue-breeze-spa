@@ -25,8 +25,8 @@ const form = reactive({
 
 const submit = () => {
     form.processing = true;
-    authStore;
-    getCsrfCookie()
+    authStore
+        .getCsrfCookie()
         .then(() => {
             return axios.post('/forgot-password', form.data);
         })
