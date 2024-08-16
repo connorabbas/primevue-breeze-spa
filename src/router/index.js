@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import progress from '@/utilities/progress';
+import progress from '@/utils/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
 import middlewareMap from '@/middleware';

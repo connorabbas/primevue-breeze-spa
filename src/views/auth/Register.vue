@@ -1,5 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import router from '@/router';
+import axios from '@/utils/axios';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -25,10 +27,13 @@ const form = reactive({
 const submit = () => {
     form.processing = true;
     authStore
-        .register(form.data)
+        .getCsrfCookie()
+        .then(() => {
+            return axios.post('/register', form.data);
+        })
         .then((response) => {
             clearErrors();
-            authStore.loginRedirect();
+            router.push({ name: 'dashboard' });
         })
         .catch((error) => {
             handleAxiosError(error);
@@ -44,7 +49,7 @@ const submit = () => {
         .finally(() => {
             form.processing = false;
         });
-}
+};
 
 onMounted(() => {
     nameInput.value.$el.focus();
