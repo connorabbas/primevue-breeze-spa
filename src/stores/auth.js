@@ -51,16 +51,6 @@ export const useAuthStore = defineStore('auth', () => {
     function getCsrfCookie() {
         return axios.get('/sanctum/csrf-cookie');
     }
-    function requestPasswordResetLink(formData) {
-        return getCsrfCookie().then(() => {
-            return axios.post('/forgot-password', formData);
-        });
-    }
-    function resetPassword(formData) {
-        return getCsrfCookie().then(() => {
-            return axios.post('/reset-password', formData);
-        });
-    }
     function sendVerificationEmail() {
         return axios.post('/email/verification-notification').then((response) => {
             setFlashMessage('success', response.data.status);
