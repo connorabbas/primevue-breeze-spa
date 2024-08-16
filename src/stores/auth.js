@@ -3,8 +3,8 @@ import { defineStore } from 'pinia';
 import { useToast } from 'primevue/usetoast';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import router from '@/router';
-import axios from '@/utilities/axios';
-import progress from '@/utilities/progress';
+import axios from '@/utils/axios';
+import progress from '@/utils/progress';
 
 export const useAuthStore = defineStore('auth', () => {
     const toast = useToast();
@@ -13,14 +13,6 @@ export const useAuthStore = defineStore('auth', () => {
     const mustVerifyEmail = false;
     const user = ref(null);
 
-    function loginRedirect() {
-        const redirect = router.currentRoute.value.query.redirect;
-        if (redirect) {
-            router.push({ path: redirect });
-        } else {
-            router.push({ name: 'dashboard' });
-        }
-    }
     function getUserError() {
         user.value = null;
         toast.removeAllGroups(); // prevent multiple of the same toast from popping up
@@ -59,46 +51,6 @@ export const useAuthStore = defineStore('auth', () => {
     function getCsrfCookie() {
         return axios.get('/sanctum/csrf-cookie');
     }
-    function login(formData) {
-        progress.start();
-        return getCsrfCookie()
-            .then(() => {
-                return axios.post('/login', formData);
-            })
-            .finally(() => {
-                progress.done();
-            });
-    }
-    function register(formData) {
-        progress.start();
-        return getCsrfCookie()
-            .then(() => {
-                return axios.post('/register', formData);
-            })
-            .finally(() => {
-                progress.done();
-            });
-    }
-    function requestPasswordResetLink(formData) {
-        progress.start();
-        return getCsrfCookie()
-            .then(() => {
-                return axios.post('/forgot-password', formData);
-            })
-            .finally(() => {
-                progress.done();
-            });
-    }
-    function resetPassword(formData) {
-        progress.start();
-        return getCsrfCookie()
-            .then(() => {
-                return axios.post('/reset-password', formData);
-            })
-            .finally(() => {
-                progress.done();
-            });
-    }
     function sendVerificationEmail() {
         return axios.post('/email/verification-notification').then((response) => {
             setFlashMessage('success', response.data.status);
@@ -122,12 +74,7 @@ export const useAuthStore = defineStore('auth', () => {
         user,
         getUser,
         getCsrfCookie,
-        loginRedirect,
-        requestPasswordResetLink,
-        resetPassword,
         sendVerificationEmail,
-        login,
-        register,
         logout,
     };
 });

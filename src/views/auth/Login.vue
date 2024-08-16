@@ -1,5 +1,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import router from '@/router';
+import axios from '@/utils/axios';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -28,10 +30,18 @@ const form = reactive({
 const submit = () => {
     form.processing = true;
     authStore
-        .login(form.data)
+        .getCsrfCookie()
+        .then(() => {
+            return axios.post('/login', form.data);
+        })
         .then((response) => {
             clearErrors();
-            authStore.loginRedirect();
+            const redirectPath = router.currentRoute.value.query?.redirect;
+            if (redirectPath) {
+                router.push({ path: redirectPath });
+            } else {
+                router.push({ name: 'dashboard' });
+            }
         })
         .catch((error) => {
             handleAxiosError(error);

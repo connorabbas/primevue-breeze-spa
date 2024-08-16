@@ -1,6 +1,6 @@
 import NProgress from 'nprogress';
 
-NProgress.configure({ showSpinner: false });
 const progress = NProgress;
+progress.configure({ showSpinner: false });
 
 export default progress;

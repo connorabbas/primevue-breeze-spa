@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import axios from '@/utils/axios';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -37,7 +38,10 @@ const form = reactive({
 const submit = () => {
     form.processing = true;
     authStore
-        .resetPassword(form.data)
+        .getCsrfCookie()
+        .then(() => {
+            return axios.post('/reset-password', form.data);
+        })
         .then((response) => {
             clearErrors();
             router.push({ name: 'login' }).then(() => {

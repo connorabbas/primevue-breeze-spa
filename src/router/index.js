@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import progress from '@/utilities/progress';
+import progress from '@/utils/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
-import middlewareMap from '@/router/middleware/map';
+import middlewareMap from '@/middleware';
 
 const basePath = import.meta.env.VITE_BASE_PATH ?? '/';
 const router = createRouter({
@@ -20,8 +20,13 @@ const router = createRouter({
     ],
 });
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from) => {
     progress.start();
+
+    // Early return check
+    if (!to?.meta?.middleware || !Array.isArray(to?.meta?.middleware)) {
+        return;
+    }
 
     // Context for middleware functions
     const authStore = useAuthStore();
@@ -32,16 +37,9 @@ router.beforeEach(async (to, from, next) => {
     const middlewares = middlewareNames.map((name) => middlewareMap[name]).filter(Boolean);
     if (middlewares.length > 0) {
         for (const middlewareResult of middlewares) {
-            const result = await middlewareResult(context);
-            // only use next() here in the router, avoid weird external promise behavior
-            if (result && result.next) {
-                next(result.next);
-                return;
-            }
+            return middlewareResult(context);
         }
     }
-
-    next();
 });
 
 router.afterEach(() => {

@@ -5,7 +5,7 @@
 		"../docker-compose.yml"
 	],
 	"service": "primevue_breeze_spa",
-	"workspaceFolder": "/srv/app",
+	"workspaceFolder": "/web",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -14,7 +14,8 @@
 				"mikestead.dotenv",
 				"streetsidesoftware.code-spell-checker",
 				"hollowtree.vue-snippets",
-				"Vue.volar"
+				"Vue.volar",
+				"yzhang.markdown-all-in-one"
 			],
 			"settings": {
                 "terminal.integrated.shell.linux": "/bin/sh"

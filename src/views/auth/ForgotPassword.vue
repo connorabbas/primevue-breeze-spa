@@ -1,5 +1,6 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
+import axios from '@/utils/axios';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -25,7 +26,10 @@ const form = reactive({
 const submit = () => {
     form.processing = true;
     authStore
-        .requestPasswordResetLink(form.data)
+        .getCsrfCookie()
+        .then(() => {
+            return axios.post('/forgot-password', form.data);
+        })
         .then((response) => {
             clearErrors();
             setFlashMessage('success', response.data.status);
