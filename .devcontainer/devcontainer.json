@@ -1,30 +1,30 @@
 // https://aka.ms/devcontainer.json
 {
-	"name": "PrimeVue Breeze SPA",
-	"dockerComposeFile": [
-		"../docker-compose.yml"
-	],
-	"service": "primevue_breeze_spa",
-	"workspaceFolder": "/web",
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"eamodio.gitlens",
-				"esbenp.prettier-vscode",
-				"mikestead.dotenv",
-				"streetsidesoftware.code-spell-checker",
-				"hollowtree.vue-snippets",
-				"Vue.volar",
-				"yzhang.markdown-all-in-one"
-			],
-			"settings": {
+    "name": "PrimeVue Breeze SPA",
+    "dockerComposeFile": [
+        "../docker-compose.yml"
+    ],
+    "service": "primevue_breeze_spa",
+    "workspaceFolder": "/web",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "eamodio.gitlens",
+                "esbenp.prettier-vscode",
+                "mikestead.dotenv",
+                "streetsidesoftware.code-spell-checker",
+                "hollowtree.vue-snippets",
+                "Vue.volar",
+                "yzhang.markdown-all-in-one"
+            ],
+            "settings": {
                 "terminal.integrated.shell.linux": "/bin/sh"
             }
-		}
-	}
-    // "remoteUser": "node"
-	// "postCreateCommand": "npm install"
-	// "forwardPorts": [],
-	// "runServices": [],
-	// "shutdownAction": "none",
+        }
+    },
+    "postCreateCommand": "chown -R 1000:1000 /web && npm install",
+    "remoteUser": "node"
+    // "forwardPorts": [],
+    // "runServices": [],
+    // "shutdownAction": "none",
 }
