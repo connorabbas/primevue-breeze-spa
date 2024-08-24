@@ -19,3 +19,4 @@ services:
 networks:
   proxy:
     name: "traefik_network"
+    external: true
