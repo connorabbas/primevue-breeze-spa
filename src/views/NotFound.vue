@@ -12,7 +12,7 @@ import ResponsiveCard from '@/components/ResponsiveCard.vue';
                         <p class="mb-8 text-2xl font-semibold md:text-3xl text-muted-color"
                             >Sorry, we couldn't find this page.</p
                         >
-                        <RouterLink :to="{ name: 'home' }">
+                        <RouterLink :to="{ name: 'welcome' }">
                             <Button
                                 raised
                                 label="Back to homepage"
