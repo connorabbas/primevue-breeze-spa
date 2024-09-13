@@ -62,7 +62,7 @@ export const useAuthStore = defineStore('auth', () => {
             .post('/logout')
             .then((response) => {
                 user.value = null;
-                router.push({ name: 'home' });
+                router.push({ name: 'welcome' });
             })
             .finally(() => {
                 progress.done();

@@ -1,8 +1,8 @@
 const webRoutes = [
     {
         path: '/',
-        name: 'home',
-        component: () => import('@/views/Home.vue'),
+        name: 'welcome',
+        component: () => import('@/views/Welcome.vue'),
     },
     {
         path: '/dashboard',
