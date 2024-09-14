@@ -1,7 +1,7 @@
 # Vue SPA w/ PrimeVue & Laravel Breeze API Stack
 A [PrimeVue](https://primevue.org/) SPA starter kit meant for use with a [Laravel Breeze](https://laravel.com/docs/master/starter-kits#laravel-breeze) API stack backend.
 
-An alternative to: https://github.com/connorabbas/primevue-breeze-inertia & https://github.com/connorabbas/primevue-breeze-nuxt
+An alternative to using my [Inertia](https://github.com/connorabbas/primevue-breeze-inertia) or [Nuxt](https://github.com/connorabbas/primevue-breeze-nuxt) starter kits.
 
 ## Setup 
 1. Clone the repo (or download the zip)
@@ -13,7 +13,7 @@ An alternative to: https://github.com/connorabbas/primevue-breeze-inertia & http
     # Remember, your SPA and API must share the same top-level domain
     # Example implementation, could also use localhost with different port numbers
     APP_URL="http://breeze-api.test" # Match this value with VITE_API_BASE_URL in the Vue app
-    FRONTEND_URL="http://vue-spa.breeze-api.test"
+    FRONTEND_URL="http://vue-spa.breeze-api.test" # Add app.frontend_url config entry as needed
     SANCTUM_STATEFUL_DOMAINS="vue-spa.breeze-api.test"
     SESSION_DOMAIN=".breeze-api.test"
     ```
