@@ -1,12 +1,12 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
+import { ref, useTemplateRef, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import Drawer from 'primevue/drawer';
 import ApplicationLogo from '@/components/ApplicationLogo.vue';
 import Container from '@/components/Container.vue';
 import LinksMenu from '@/components/LinksMenu.vue';
 import LinksMenuBar from '@/components/LinksMenuBar.vue';
-import NestedLinksMenu from '@/components/NestedLinksMenu.vue';
+import LinksPanelMenu from '@/components/LinksPanelMenu.vue';
 import ToggleThemeButton from '@/components/ToggleThemeButton.vue';
 import { useAuthStore } from '@/stores/auth';
 
@@ -24,7 +24,7 @@ const mainMenuItems = [
 ];
 
 // User menu (desktop)
-const userMenu = ref();
+const userMenu = useTemplateRef('user-menu');
 const userMenuItems = [
     {
         label: 'Profile',
@@ -120,7 +120,7 @@ watchEffect(() => {
                                     <LinksMenu
                                         :model="userMenuItems"
                                         popup
-                                        ref="userMenu"
+                                        ref="user-menu"
                                         class="shadow"
                                     />
                                     <Button
@@ -166,7 +166,7 @@ watchEffect(() => {
                     <div>
                         <div class="mb-5">
                             <p class="text-muted-color font-bold uppercase text-sm mb-2"> Home </p>
-                            <NestedLinksMenu
+                            <LinksPanelMenu
                                 :model="homeMobileMenuItems"
                                 class="w-full"
                             />

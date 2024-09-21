@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue';
+import { useTemplateRef, reactive, computed, onMounted } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -12,7 +12,7 @@ const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
 const { flashMessages } = useFlashMessage();
 
-const nameInput = ref();
+const nameInput = useTemplateRef('name-input');
 
 const verificationLinkSent = computed(() => flashMessages.success === 'verification-link-sent');
 
@@ -71,7 +71,7 @@ onMounted(() => {
                 >
                 <InputText
                     required
-                    ref="nameInput"
+                    ref="name-input"
                     id="name"
                     type="text"
                     v-model="form.data.name"

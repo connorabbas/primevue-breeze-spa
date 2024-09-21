@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { useTemplateRef, reactive, onMounted } from 'vue';
 import router from '@/router';
 import axios from '@/utils/axios';
 import { useToast } from 'primevue/usetoast';
@@ -12,7 +12,7 @@ const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
-const nameInput = ref();
+const nameInput = useTemplateRef('name-input');
 
 const form = reactive({
     processing: false,
@@ -66,7 +66,7 @@ onMounted(() => {
                     >Name</label
                 >
                 <InputText
-                    ref="nameInput"
+                    ref="name-input"
                     id="name"
                     type="text"
                     v-model="form.data.name"
