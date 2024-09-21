@@ -12,10 +12,10 @@ An alternative to using my [Inertia](https://github.com/connorabbas/primevue-bre
     ```
     # Remember, your SPA and API must share the same top-level domain
     # Example implementation, could also use localhost with different port numbers
-    APP_URL="http://breeze-api.test" # Match this value with VITE_API_BASE_URL in the Vue app
-    FRONTEND_URL="http://vue-spa.breeze-api.test" # Add app.frontend_url config entry as needed
-    SANCTUM_STATEFUL_DOMAINS="vue-spa.breeze-api.test"
-    SESSION_DOMAIN=".breeze-api.test"
+    APP_URL="http://breeze-api.localhost" # Match this value with VITE_API_BASE_URL in the Vue app
+    FRONTEND_URL="http://vue-spa.breeze-api.localhost" # Add app.frontend_url config entry as needed
+    SANCTUM_STATEFUL_DOMAINS="vue-spa.breeze-api.localhost"
+    SESSION_DOMAIN=".breeze-api.localhost"
     ```
 
 ## Theme
