@@ -1,3 +1,4 @@
+# For development, not production
 FROM node:20-alpine
 
 USER root

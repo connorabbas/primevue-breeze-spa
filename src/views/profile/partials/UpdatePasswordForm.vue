@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { useTemplateRef, reactive } from 'vue';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -9,8 +9,8 @@ const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
 
-const currentPasswordInput = ref(null);
-const passwordInput = ref(null);
+const currentPasswordInput = useTemplateRef('current-password-input');
+const newPasswordInput = useTemplateRef('new-password-input');
 
 const form = reactive({
     processing: false,
@@ -54,7 +54,7 @@ const updatePassword = () => {
                 <InputText
                     required
                     id="current_password"
-                    ref="currentPasswordInput"
+                    ref="current-password-input"
                     type="password"
                     v-model="form.data.current_password"
                     class="w-full"
@@ -76,7 +76,7 @@ const updatePassword = () => {
                 <InputText
                     required
                     id="password"
-                    ref="passwordInput"
+                    ref="new-password-input"
                     type="password"
                     v-model="form.data.password"
                     class="w-full"

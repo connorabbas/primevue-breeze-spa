@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { useTemplateRef, reactive, onMounted } from 'vue';
 import router from '@/router';
 import axios from '@/utils/axios';
 import { useToast } from 'primevue/usetoast';
@@ -16,7 +16,7 @@ const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 const { flashMessages } = useFlashMessage();
 
-const emailInput = ref();
+const emailInput = useTemplateRef('email-input');
 
 const form = reactive({
     processing: false,
@@ -88,7 +88,7 @@ onMounted(() => {
                 >
                 <InputText
                     required
-                    ref="emailInput"
+                    ref="email-input"
                     id="email"
                     type="email"
                     v-model="form.data.email"
