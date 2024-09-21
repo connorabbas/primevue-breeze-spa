@@ -56,6 +56,7 @@ const submit = () => {
         })
         .finally(() => {
             form.processing = false;
+            form.data.password = null;
         });
 };
 
