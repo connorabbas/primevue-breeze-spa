@@ -10,6 +10,7 @@
     },
     "dependencies": {
         "@primevue/themes": "^4.0.0",
+        "@vueuse/core": "^11.1.0",
         "axios": "^1.7.2",
         "nprogress": "^0.2.0",
         "pinia": "^2.1.7",

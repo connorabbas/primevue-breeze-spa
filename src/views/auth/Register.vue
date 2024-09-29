@@ -33,7 +33,9 @@ const submit = () => {
         })
         .then((response) => {
             clearErrors();
-            router.push({ name: 'dashboard' });
+            authStore.getUser().finally(() => {
+                router.push({ name: 'dashboard' });
+            });
         })
         .catch((error) => {
             handleAxiosError(error);

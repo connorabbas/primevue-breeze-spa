@@ -32,7 +32,8 @@ router.beforeEach(async (to, from) => {
     const authStore = useAuthStore();
     const context = { to, from, authStore };
 
-    // Run middleware pipeline based on route meta
+    // Run middleware pipeline
+    middlewareMap.global(context);
     const middlewareNames = to.meta.middleware || [];
     const middlewares = middlewareNames.map((name) => middlewareMap[name]).filter(Boolean);
     if (middlewares.length > 0) {

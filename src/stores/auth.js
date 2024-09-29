@@ -1,17 +1,18 @@
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useToast } from 'primevue/usetoast';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import router from '@/router';
 import axios from '@/utils/axios';
 import progress from '@/utils/progress';
+import { useStorage } from '@vueuse/core';
 
 export const useAuthStore = defineStore('auth', () => {
     const toast = useToast();
     const { setFlashMessage } = useFlashMessage();
 
     const mustVerifyEmail = false;
-    const user = ref(null);
+
+    const user = useStorage('authenticatedUser', null); // user persisted in case page is reloaded
 
     function getUserError() {
         user.value = null;
@@ -27,13 +28,7 @@ export const useAuthStore = defineStore('auth', () => {
         return axios
             .get('/api/user')
             .then((response) => {
-                if (
-                    response.status >= 200 &&
-                    response.status < 300 &&
-                    response.data?.id &&
-                    response.data?.name &&
-                    response.data?.email
-                ) {
+                if (response.status === 200) {
                     user.value = response.data;
                 } else {
                     getUserError();

@@ -36,12 +36,14 @@ const submit = () => {
         })
         .then((response) => {
             clearErrors();
-            const redirectPath = router.currentRoute.value.query?.redirect;
-            if (redirectPath) {
-                router.push({ path: redirectPath });
-            } else {
-                router.push({ name: 'dashboard' });
-            }
+            authStore.getUser().finally(() => {
+                const redirectPath = router.currentRoute.value.query?.redirect;
+                if (redirectPath) {
+                    router.push({ path: redirectPath });
+                } else {
+                    router.push({ name: 'dashboard' });
+                }
+            });
         })
         .catch((error) => {
             handleAxiosError(error);
