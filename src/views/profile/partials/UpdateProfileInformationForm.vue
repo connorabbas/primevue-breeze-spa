@@ -34,17 +34,7 @@ const updateProfileInformation = () => {
     });
 };
 const resendVerifyEmail = () => {
-    authStore.sendVerificationEmail().catch((error) => {
-        handleAxiosError(error);
-        if (errors.critical || errors.other) {
-            toast.add({
-                severity: 'error',
-                summary: 'Error',
-                detail: 'An unexpected error occurred, please try again later.',
-                life: 3000,
-            });
-        }
-    });
+    authStore.sendVerificationEmail().catch((error) => handleAxiosError(error));
 };
 
 onMounted(() => {

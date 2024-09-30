@@ -1,13 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
-import { useToast } from 'primevue/usetoast';
 import { useAuthStore } from '@/stores/auth';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import Message from 'primevue/message';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 
-const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 const { flashMessages } = useFlashMessage();
@@ -20,17 +18,7 @@ const submit = () => {
     processing.value = true;
     authStore
         .sendVerificationEmail()
-        .catch((error) => {
-            handleAxiosError(error);
-            if (errors.critical || errors.other) {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'An unexpected error occurred, please try again later.',
-                    life: 3000,
-                });
-            }
-        })
+        .catch((error) => handleAxiosError(error))
         .finally(() => {
             processing.value = false;
         });

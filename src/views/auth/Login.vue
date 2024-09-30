@@ -2,7 +2,6 @@
 import { useTemplateRef, reactive, onMounted } from 'vue';
 import router from '@/router';
 import axios from '@/utils/axios';
-import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
@@ -11,7 +10,6 @@ import Checkbox from 'primevue/checkbox';
 import InputErrors from '@/components/InputErrors.vue';
 import Message from 'primevue/message';
 
-const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 const { flashMessages } = useFlashMessage();
@@ -45,17 +43,7 @@ const submit = () => {
                 }
             });
         })
-        .catch((error) => {
-            handleAxiosError(error);
-            if (errors.critical || errors.other) {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'An unexpected error occurred, please try again later.',
-                    life: 3000,
-                });
-            }
-        })
+        .catch((error) => handleAxiosError(error))
         .finally(() => {
             form.processing = false;
             form.data.password = null;
