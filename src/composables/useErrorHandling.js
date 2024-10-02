@@ -32,7 +32,13 @@ export function useErrorHandling() {
             const data = error.response.data;
 
             if (status === 401) {
-                router.push({ name: 'login' });
+                //router.push({ name: 'login' });
+                toast.add({
+                    severity: 'info',
+                    summary: 'You are unauthorized',
+                    detail: errors.warning,
+                    life: 3000,
+                });
             } else if (status === 403) {
                 errors.warning = data.message || 'You do not have permission to perform this action.';
                 toast.add({

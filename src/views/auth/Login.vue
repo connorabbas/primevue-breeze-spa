@@ -34,7 +34,7 @@ const submit = () => {
         })
         .then((response) => {
             clearErrors();
-            authStore.getUser().finally(() => {
+            authStore.fetchUser().finally(() => {
                 const redirectPath = router.currentRoute.value.query?.redirect;
                 if (redirectPath) {
                     router.push({ path: redirectPath });

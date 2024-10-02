@@ -3,7 +3,7 @@ import { useAuthStore } from '@/stores/auth';
 import progress from '@/utils/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
-import middlewareMap from '@/middleware';
+import globalMiddleware from '@/middleware/global';
 
 const basePath = import.meta.env.VITE_BASE_PATH ?? '/';
 const router = createRouter({
@@ -31,14 +31,15 @@ router.beforeEach(async (to, from) => {
     // Context for middleware functions
     const authStore = useAuthStore();
     const context = { to, from, authStore };
+    console.log(authStore.user);
+    //await authStore.fetchUser();
 
     // Run middleware pipeline
-    middlewareMap.global(context);
-    const middlewareNames = to.meta.middleware || [];
-    const middlewares = middlewareNames.map((name) => middlewareMap[name]).filter(Boolean);
+    const routeMiddleware = to.meta.middleware || [];
+    const middlewares = [globalMiddleware, ...routeMiddleware];
     if (middlewares.length > 0) {
-        for (const middlewareResult of middlewares) {
-            return middlewareResult(context);
+        for (let i = 0; i < middlewares.length; i++) {
+            return await middlewares[i](context);
         }
     }
 });

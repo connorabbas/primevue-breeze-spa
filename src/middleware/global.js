@@ -1,7 +1,6 @@
-export default async function (context) {
-    const { authStore } = context;
-
+export default async function global(context) {
+    const { to, from, authStore } = context;
     if (authStore.user) {
-        await authStore.getUser();
+        await authStore.fetchUser();
     }
 }

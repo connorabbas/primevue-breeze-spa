@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import { useErrorHandling } from '@/composables/useErrorHandling';
@@ -12,9 +13,10 @@ export const useAuthStore = defineStore('auth', () => {
 
     const mustVerifyEmail = false;
 
-    const user = useStorage('authenticatedUser', null); // user persisted in case page is reloaded
+    //const user = useStorage('authenticatedUser', null); // user persisted in case page is reloaded
+    const user = ref(null); // user persisted in case page is reloaded
 
-    function getUser() {
+    function fetchUser() {
         return axios
             .get('/api/user')
             .then((response) => {
@@ -48,7 +50,7 @@ export const useAuthStore = defineStore('auth', () => {
     return {
         mustVerifyEmail,
         user,
-        getUser,
+        fetchUser,
         getCsrfCookie,
         sendVerificationEmail,
         logout,

@@ -31,7 +31,7 @@ const submit = () => {
         })
         .then((response) => {
             clearErrors();
-            authStore.getUser().finally(() => {
+            authStore.fetchUser().finally(() => {
                 router.push({ name: 'dashboard' });
             });
         })
