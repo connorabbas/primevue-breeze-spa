@@ -1,6 +1,5 @@
 import { reactive, computed } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import router from '@/router';
 
 export function useErrorHandling() {
     const toast = useToast();
@@ -25,21 +24,13 @@ export function useErrorHandling() {
         return noValidation && noCritical && noWarning;
     });
 
-    const handleAxiosError = (error) => {
+    const handleAxiosError = (error, after = () => {}) => {
         clearErrors();
         if (error.response) {
             const status = error.response.status;
             const data = error.response.data;
 
-            if (status === 401) {
-                //router.push({ name: 'login' });
-                toast.add({
-                    severity: 'info',
-                    summary: 'You are unauthorized',
-                    detail: errors.warning,
-                    life: 3000,
-                });
-            } else if (status === 403) {
+            if (status === 403) {
                 errors.warning = data.message || 'You do not have permission to perform this action.';
                 toast.add({
                     severity: 'error',
@@ -69,6 +60,7 @@ export function useErrorHandling() {
                 life: 3000,
             });
         }
+        after();
     };
 
     return { errors, handleAxiosError, clearErrors, hasNoErrors };

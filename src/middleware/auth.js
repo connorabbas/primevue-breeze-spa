@@ -1,6 +1,4 @@
-export default async function auth(context) {
-    const { to, from, authStore } = context;
-    console.log('auth middleware');
+export default async function auth({ to, from, authStore }) {
     if (!authStore.user) {
         return { name: 'login', query: { redirect: to.fullPath } };
     }

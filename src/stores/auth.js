@@ -14,7 +14,7 @@ export const useAuthStore = defineStore('auth', () => {
     const mustVerifyEmail = false;
 
     //const user = useStorage('authenticatedUser', null); // user persisted in case page is reloaded
-    const user = ref(null); // user persisted in case page is reloaded
+    const user = ref(null);
 
     function fetchUser() {
         return axios
@@ -24,7 +24,13 @@ export const useAuthStore = defineStore('auth', () => {
                     user.value = response.data;
                 }
             })
-            .catch((error) => handleAxiosError(error));
+            .catch((error) =>
+                handleAxiosError(error, () => {
+                    if (error.response.status === 401) {
+                        user.value = null;
+                    }
+                })
+            );
     }
     function getCsrfCookie() {
         return axios.get('/sanctum/csrf-cookie');

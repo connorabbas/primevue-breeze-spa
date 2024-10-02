@@ -34,14 +34,12 @@ const submit = () => {
         })
         .then((response) => {
             clearErrors();
-            authStore.fetchUser().finally(() => {
-                const redirectPath = router.currentRoute.value.query?.redirect;
-                if (redirectPath) {
-                    router.push({ path: redirectPath });
-                } else {
-                    router.push({ name: 'dashboard' });
-                }
-            });
+            const redirectPath = router.currentRoute.value.query?.redirect;
+            if (redirectPath) {
+                router.push({ path: redirectPath });
+            } else {
+                router.push({ name: 'dashboard' });
+            }
         })
         .catch((error) => handleAxiosError(error))
         .finally(() => {

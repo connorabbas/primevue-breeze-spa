@@ -31,9 +31,7 @@ const submit = () => {
         })
         .then((response) => {
             clearErrors();
-            authStore.fetchUser().finally(() => {
-                router.push({ name: 'dashboard' });
-            });
+            router.push({ name: 'dashboard' });
         })
         .catch((error) => handleAxiosError(error))
         .finally(() => {
