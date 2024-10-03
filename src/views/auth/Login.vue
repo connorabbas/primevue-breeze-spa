@@ -32,8 +32,9 @@ const submit = () => {
         .then(() => {
             return axios.post('/login', form.data);
         })
-        .then((response) => {
+        .then(async (response) => {
             clearErrors();
+            await authStore.fetchUser();
             const redirectPath = router.currentRoute.value.query?.redirect;
             if (redirectPath) {
                 router.push({ path: redirectPath });

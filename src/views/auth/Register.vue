@@ -29,8 +29,9 @@ const submit = () => {
         .then(() => {
             return axios.post('/register', form.data);
         })
-        .then((response) => {
+        .then(async (response) => {
             clearErrors();
+            await authStore.fetchUser();
             router.push({ name: 'dashboard' });
         })
         .catch((error) => handleAxiosError(error))

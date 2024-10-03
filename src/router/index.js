@@ -22,19 +22,14 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     progress.start();
 
-    // Early return check
-    if (!to?.meta?.middleware || !Array.isArray(to?.meta?.middleware)) {
-        return;
+    // Fetch user if authenticated
+    const authStore = useAuthStore();
+    if (authStore.user) {
+        await authStore.fetchUser();
     }
 
-    // Context for middleware functions
-    const authStore = useAuthStore();
-    const context = { to, from, authStore };
-
-    // Get user
-    await authStore.fetchUser();
-
     // Run middleware pipeline
+    const context = { to, from, authStore };
     const routeMiddleware = to.meta.middleware || [];
     if (routeMiddleware.length > 0) {
         for (const middlewareResult of routeMiddleware) {

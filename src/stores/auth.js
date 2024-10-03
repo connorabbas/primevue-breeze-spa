@@ -1,4 +1,3 @@
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import { useErrorHandling } from '@/composables/useErrorHandling';
@@ -13,8 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     const mustVerifyEmail = false;
 
-    //const user = useStorage('authenticatedUser', null); // user persisted in case page is reloaded
-    const user = ref(null);
+    const user = useStorage('authenticatedUser', null); // user persisted in case page is manually reloaded
 
     function fetchUser() {
         return axios
@@ -24,13 +22,12 @@ export const useAuthStore = defineStore('auth', () => {
                     user.value = response.data;
                 }
             })
-            .catch((error) =>
-                handleAxiosError(error, () => {
-                    if (error.response.status === 401) {
-                        user.value = null;
-                    }
-                })
-            );
+            .catch((error) => {
+                handleAxiosError(error);
+                if (error.response.status === 401) {
+                    user.value = null;
+                }
+            });
     }
     function getCsrfCookie() {
         return axios.get('/sanctum/csrf-cookie');
