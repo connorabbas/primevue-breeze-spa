@@ -2,13 +2,11 @@
 import { useTemplateRef, reactive, onMounted } from 'vue';
 import router from '@/router';
 import axios from '@/utils/axios';
-import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
-const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
@@ -31,21 +29,12 @@ const submit = () => {
         .then(() => {
             return axios.post('/register', form.data);
         })
-        .then((response) => {
+        .then(async (response) => {
             clearErrors();
+            await authStore.fetchUser();
             router.push({ name: 'dashboard' });
         })
-        .catch((error) => {
-            handleAxiosError(error);
-            if (errors.critical || errors.other) {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'An unexpected error occurred, please try again later.',
-                    life: 3000,
-                });
-            }
-        })
+        .catch((error) => handleAxiosError(error))
         .finally(() => {
             form.processing = false;
         });

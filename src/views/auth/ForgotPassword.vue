@@ -1,7 +1,6 @@
 <script setup>
 import { useTemplateRef, reactive, onMounted } from 'vue';
 import axios from '@/utils/axios';
-import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
@@ -9,7 +8,6 @@ import Message from 'primevue/message';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
-const toast = useToast();
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 const { flashMessages, setFlashMessage } = useFlashMessage();
@@ -34,17 +32,7 @@ const submit = () => {
             clearErrors();
             setFlashMessage('success', response.data.status);
         })
-        .catch((error) => {
-            handleAxiosError(error);
-            if (errors.critical || errors.other) {
-                toast.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'An unexpected error occurred, please try again later.',
-                    life: 3000,
-                });
-            }
-        })
+        .catch((error) => handleAxiosError(error))
         .finally(() => {
             form.processing = false;
         });

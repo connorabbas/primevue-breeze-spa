@@ -3,7 +3,6 @@ import { useAuthStore } from '@/stores/auth';
 import progress from '@/utils/progress';
 import authRoutes from './auth';
 import webRoutes from './web';
-import middlewareMap from '@/middleware';
 
 const basePath = import.meta.env.VITE_BASE_PATH ?? '/';
 const router = createRouter({
@@ -23,21 +22,18 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
     progress.start();
 
-    // Early return check
-    if (!to?.meta?.middleware || !Array.isArray(to?.meta?.middleware)) {
-        return;
+    // Fetch user if authenticated
+    const authStore = useAuthStore();
+    if (authStore.user) {
+        await authStore.fetchUser();
     }
 
-    // Context for middleware functions
-    const authStore = useAuthStore();
+    // Run middleware pipeline
     const context = { to, from, authStore };
-
-    // Run middleware pipeline based on route meta
-    const middlewareNames = to.meta.middleware || [];
-    const middlewares = middlewareNames.map((name) => middlewareMap[name]).filter(Boolean);
-    if (middlewares.length > 0) {
-        for (const middlewareResult of middlewares) {
-            return middlewareResult(context);
+    const routeMiddleware = to.meta.middleware || [];
+    if (routeMiddleware.length > 0) {
+        for (const middlewareResult of routeMiddleware) {
+            return await middlewareResult(context);
         }
     }
 });

@@ -1,50 +1,31 @@
-import { ref } from 'vue';
 import { defineStore } from 'pinia';
-import { useToast } from 'primevue/usetoast';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
+import { useErrorHandling } from '@/composables/useErrorHandling';
 import router from '@/router';
 import axios from '@/utils/axios';
 import progress from '@/utils/progress';
+import { useStorage } from '@vueuse/core';
 
 export const useAuthStore = defineStore('auth', () => {
-    const toast = useToast();
     const { setFlashMessage } = useFlashMessage();
+    const { handleAxiosError } = useErrorHandling();
 
     const mustVerifyEmail = false;
-    const user = ref(null);
 
-    function getUserError() {
-        user.value = null;
-        toast.removeAllGroups(); // prevent multiple of the same toast from popping up
-        toast.add({
-            severity: 'error',
-            summary: 'Authentication Error',
-            detail: 'Unable to reach the authentication server, please try again later.',
-            life: 3000,
-        });
-    }
-    function getUser() {
+    const user = useStorage('authenticatedUser', null); // user persisted in case page is manually reloaded
+
+    function fetchUser() {
         return axios
             .get('/api/user')
             .then((response) => {
-                if (
-                    response.status >= 200 &&
-                    response.status < 300 &&
-                    response.data?.id &&
-                    response.data?.name &&
-                    response.data?.email
-                ) {
+                if (response.status === 200) {
                     user.value = response.data;
-                } else {
-                    getUserError();
                 }
             })
             .catch((error) => {
-                if (error.response && error.response.status == 401) {
-                    // endpoint is fine, user is unauthorized
+                handleAxiosError(error);
+                if (error.response.status === 401) {
                     user.value = null;
-                } else {
-                    getUserError();
                 }
             });
     }
@@ -72,7 +53,7 @@ export const useAuthStore = defineStore('auth', () => {
     return {
         mustVerifyEmail,
         user,
-        getUser,
+        fetchUser,
         getCsrfCookie,
         sendVerificationEmail,
         logout,

@@ -16,8 +16,9 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 
 const app = createApp(App);
+const pinia = createPinia();
 
-app.use(createPinia())
+app.use(pinia)
     .use(router)
     .use(PrimeVue, {
         theme: customThemePreset,

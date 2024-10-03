@@ -1,8 +1,5 @@
-export default async function (context) {
-    const { authStore } = context;
-    await authStore.getUser();
-
+export default async function guest({ to, from, authStore }) {
     if (authStore.user) {
         return { name: 'dashboard' };
     }
-};
+}
