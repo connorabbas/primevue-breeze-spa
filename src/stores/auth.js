@@ -24,7 +24,7 @@ export const useAuthStore = defineStore('auth', () => {
             })
             .catch((error) => {
                 handleAxiosError(error);
-                if (error.response.status === 401) {
+                if (error.request || (error.response && error.response.status === 401)) {
                     user.value = null;
                 }
             });
