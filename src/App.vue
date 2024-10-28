@@ -1,10 +1,6 @@
 <script setup>
 import { RouterView } from "vue-router";
-import { useTheme } from '@/composables/useTheme.js';
 import Toast from 'primevue/toast';
-
-const { initSiteTheme } = useTheme();
-initSiteTheme();
 </script>
 
 <template>
