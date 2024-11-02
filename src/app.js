@@ -13,8 +13,6 @@ import router from './router';
 import App from './App.vue';
 import PrimeVue from 'primevue/config';
 import ToastService from 'primevue/toastservice';
-import InputText from 'primevue/inputtext';
-import Button from 'primevue/button';
 
 const app = createApp(App);
 const pinia = createPinia();
@@ -28,6 +26,4 @@ app.use(pinia)
         theme: customThemePreset,
     })
     .use(ToastService)
-    .component('InputText', InputText)
-    .component('Button', Button)
     .mount('#app');

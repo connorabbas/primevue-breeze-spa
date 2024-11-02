@@ -4,7 +4,6 @@ import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
-import Message from 'primevue/message';
 import InputErrors from '@/components/InputErrors.vue';
 
 const toast = useToast();

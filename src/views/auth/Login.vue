@@ -6,9 +6,7 @@ import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import Checkbox from 'primevue/checkbox';
 import InputErrors from '@/components/InputErrors.vue';
-import Message from 'primevue/message';
 
 const authStore = useAuthStore();
 const { errors, handleAxiosError, clearErrors } = useErrorHandling();

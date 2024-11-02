@@ -1,7 +1,6 @@
 <script setup>
 import { ref, useTemplateRef, reactive } from 'vue';
 import { useErrorHandling } from '@/composables/useErrorHandling';
-import Dialog from 'primevue/dialog';
 import InputErrors from '@/components/InputErrors.vue';
 
 const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
