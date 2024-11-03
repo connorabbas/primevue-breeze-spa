@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.vue';
 import Container from '@/components/Container.vue';
-import ResponsiveCard from '@/components/ResponsiveCard.vue';
 import DeleteUserForm from './partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './partials/UpdateProfileInformationForm.vue';
