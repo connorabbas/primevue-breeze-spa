@@ -3,7 +3,6 @@ import { ref, computed } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
-import Message from 'primevue/message';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 
 const authStore = useAuthStore();

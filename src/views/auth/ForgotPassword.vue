@@ -4,7 +4,6 @@ import axios from '@/utils/axios';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
-import Message from 'primevue/message';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
@@ -63,8 +62,11 @@ onMounted(() => {
             link that will allow you to choose a new one.
         </div>
 
-        <form @submit.prevent="submit">
-            <div class="mb-6">
+        <form
+            @submit.prevent="submit"
+            class="space-y-6"
+        >
+            <div class="space-y-2">
                 <label
                     for="email"
                     class="block mb-2"
@@ -80,10 +82,7 @@ onMounted(() => {
                     :invalid="Boolean(errors.validation?.email)"
                     autocomplete="username"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.email"
-                />
+                <InputErrors :errors="errors.validation?.email" />
             </div>
 
             <div class="flex justify-end items-center">

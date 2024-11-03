@@ -1,6 +1,5 @@
 <script setup>
 import ApplicationLogo from '@/components/ApplicationLogo.vue';
-import ResponsiveCard from '@/components/ResponsiveCard.vue';
 </script>
 
 <template>
@@ -19,9 +18,11 @@ import ResponsiveCard from '@/components/ResponsiveCard.vue';
         </div>
 
         <div class="w-full sm:max-w-md mt-6">
-            <ResponsiveCard>
-                <slot />
-            </ResponsiveCard>
+            <Card>
+                <template #content>
+                    <slot />
+                </template>
+            </Card>
         </div>
     </div>
 </template>

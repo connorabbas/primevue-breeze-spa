@@ -31,9 +31,10 @@ router.beforeEach(async (to, from) => {
     // Run middleware pipeline
     const context = { to, from, authStore };
     const routeMiddleware = to.meta.middleware || [];
-    if (routeMiddleware.length > 0) {
-        for (const middlewareResult of routeMiddleware) {
-            return await middlewareResult(context);
+    for (const middleware of routeMiddleware) {
+        const result = await middleware(context);
+        if (result) {
+            return result; // Exit and redirect if middleware returns a route
         }
     }
 });

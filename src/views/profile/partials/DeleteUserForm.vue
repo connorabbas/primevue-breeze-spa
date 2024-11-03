@@ -1,7 +1,6 @@
 <script setup>
 import { ref, useTemplateRef, reactive } from 'vue';
 import { useErrorHandling } from '@/composables/useErrorHandling';
-import Dialog from 'primevue/dialog';
 import InputErrors from '@/components/InputErrors.vue';
 
 const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
@@ -27,7 +26,7 @@ function focusPasswordInput() {
 </script>
 
 <template>
-    <section class="space-y-6">
+    <section>
         <Dialog
             :draggable="false"
             position="center"
@@ -44,7 +43,7 @@ function focusPasswordInput() {
                 </p>
             </div>
 
-            <div>
+            <div class="space-y-2">
                 <InputText
                     autofocus
                     required
@@ -58,10 +57,7 @@ function focusPasswordInput() {
                     autocomplete="current-password"
                     @keyup.enter="deleteUser"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.password"
-                />
+                <InputErrors :errors="errors.validation?.password" />
             </div>
 
             <template #footer>
@@ -81,14 +77,6 @@ function focusPasswordInput() {
                 />
             </template>
         </Dialog>
-
-        <header>
-            <h2 class="text-lg font-medium mt-0 mb-2">Delete Account</h2>
-            <p class="mb-0 text-sm text-muted-color">
-                Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting
-                your account, please download any data or information that you wish to retain.
-            </p>
-        </header>
 
         <Button
             raised

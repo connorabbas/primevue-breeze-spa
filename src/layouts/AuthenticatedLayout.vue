@@ -1,12 +1,11 @@
 <script setup>
 import { ref, useTemplateRef, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
-import Drawer from 'primevue/drawer';
 import ApplicationLogo from '@/components/ApplicationLogo.vue';
 import Container from '@/components/Container.vue';
-import LinksMenu from '@/components/LinksMenu.vue';
-import LinksMenuBar from '@/components/LinksMenuBar.vue';
-import LinksPanelMenu from '@/components/LinksPanelMenu.vue';
+import LinksMenu from '@/components/PrimeVue/LinksMenu.vue';
+import LinksMenuBar from '@/components/PrimeVue/LinksMenuBar.vue';
+import LinksPanelMenu from '@/components/PrimeVue/LinksPanelMenu.vue';
 import ToggleThemeButton from '@/components/ToggleThemeButton.vue';
 import { useAuthStore } from '@/stores/auth';
 
