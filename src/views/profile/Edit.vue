@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/layouts/AuthenticatedLayout.vue';
 import Container from '@/components/Container.vue';
-import ResponsiveCard from '@/components/ResponsiveCard.vue';
 import DeleteUserForm from './partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './partials/UpdateProfileInformationForm.vue';
@@ -10,7 +9,7 @@ import UpdateProfileInformationForm from './partials/UpdateProfileInformationFor
 <template>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-bold text-xl leading-tight">Profile</h2>
+            <h1 class="font-bold text-2xl leading-tight">Profile</h1>
         </template>
 
         <Container>

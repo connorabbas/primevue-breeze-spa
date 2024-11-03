@@ -18,7 +18,7 @@ const mainMenuItems = [
     {
         label: 'Dashboard',
         route: { name: 'dashboard' },
-        active: currentRouteName.value == 'dashboard'
+        active: currentRouteName.value == 'dashboard',
     },
 ];
 
@@ -46,13 +46,13 @@ const homeMobileMenuItems = ref([
         label: 'Welcome',
         icon: 'pi pi-home',
         route: { name: 'welcome' },
-        active: currentRouteName.value == 'welcome'
+        active: currentRouteName.value == 'welcome',
     },
     {
         label: 'Dashboard',
         icon: 'pi pi-th-large',
         route: { name: 'dashboard' },
-        active: currentRouteName.value == 'dashboard'
+        active: currentRouteName.value == 'dashboard',
     },
 ]);
 const mobileMenuOpen = ref(false);
@@ -90,7 +90,7 @@ watchEffect(() => {
                         :model="mainMenuItems"
                         :pt="{
                             root: {
-                                class: 'px-0 py-3 border-0 rounded-none',
+                                class: 'px-0 py-3 border-0 rounded-none bg-surface-0 dark:bg-surface-900',
                             },
                             button: {
                                 class: 'hidden',

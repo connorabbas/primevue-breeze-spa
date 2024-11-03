@@ -22,13 +22,14 @@ defineExpose({
                 :to="item.route"
                 custom
             >
+                <!-- add if using 'nora' preset theme -->
+                <!-- hover:text-primary-100 hover:dark:text-primary-950 -->
                 <a
                     :href="href"
                     v-bind="props.action"
                     @click="navigate"
                     :class="{
-                        'font-bold text-primary dark:text-primary-300 bg-primary-50 dark:bg-primary-950 rounded-lg':
-                            item.active,
+                        'font-bold text-primary': item.active,
                     }"
                 >
                     <span
