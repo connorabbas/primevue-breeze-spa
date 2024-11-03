@@ -29,10 +29,7 @@ import UpdateProfileInformationForm from './partials/UpdateProfileInformationFor
                         <template #title>Profile Information</template>
                         <template #subtitle> Update your account's profile information and email address. </template>
                         <template #content>
-                            <UpdateProfileInformationForm
-                                :must-verify-email="mustVerifyEmail"
-                                :status="status"
-                            />
+                            <UpdateProfileInformationForm />
                         </template>
                     </Card>
 
