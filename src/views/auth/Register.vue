@@ -47,8 +47,11 @@ onMounted(() => {
 
 <template>
     <GuestLayout>
-        <form @submit.prevent="submit">
-            <div class="mb-6">
+        <form
+            @submit.prevent="submit"
+            class="space-y-6"
+        >
+            <div class="space-y-2">
                 <label
                     for="name"
                     class="block mb-2"
@@ -64,13 +67,10 @@ onMounted(() => {
                     required
                     autocomplete="name"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.name"
-                />
+                <InputErrors :errors="errors.validation?.name" />
             </div>
 
-            <div class="mb-6">
+            <div class="space-y-2">
                 <label
                     for="email"
                     class="block mb-2"
@@ -85,13 +85,10 @@ onMounted(() => {
                     required
                     autocomplete="username"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.email"
-                />
+                <InputErrors :errors="errors.validation?.email" />
             </div>
 
-            <div class="mb-6">
+            <div class="space-y-2">
                 <label
                     for="password"
                     class="block mb-2"
@@ -106,13 +103,10 @@ onMounted(() => {
                     required
                     autocomplete="new-password"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.password"
-                />
+                <InputErrors :errors="errors.validation?.password" />
             </div>
 
-            <div class="mb-6">
+            <div class="space-y-2">
                 <label
                     for="password_confirmation"
                     class="block mb-2"
@@ -127,13 +121,10 @@ onMounted(() => {
                     required
                     autocomplete="new-password"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.password_confirmation"
-                />
+                <InputErrors :errors="errors.validation?.password_confirmation" />
             </div>
 
-            <div class="flex justify-end items-center">
+            <div class="flex justify-end items-center pt-2">
                 <RouterLink
                     :to="{ name: 'login' }"
                     class="mr-4 text-muted-color underline text-muted-color hover:text-color"

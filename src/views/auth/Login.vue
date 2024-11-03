@@ -67,8 +67,11 @@ onMounted(() => {
             </Message>
         </template>
 
-        <form @submit.prevent="submit">
-            <div class="mb-6">
+        <form
+            @submit.prevent="submit"
+            class="space-y-6"
+        >
+            <div class="space-y-2">
                 <label
                     for="email"
                     class="block mb-2"
@@ -84,13 +87,10 @@ onMounted(() => {
                     :invalid="Boolean(errors.validation?.email)"
                     autocomplete="username"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.email"
-                />
+                <InputErrors :errors="errors.validation?.email" />
             </div>
 
-            <div class="mb-6">
+            <div class="space-y-2">
                 <label
                     for="password"
                     class="block mb-2"
@@ -105,13 +105,10 @@ onMounted(() => {
                     :invalid="Boolean(errors.validation?.password)"
                     autocomplete="current-password"
                 />
-                <InputErrors
-                    class="mt-2"
-                    :errors="errors.validation?.password"
-                />
+                <InputErrors :errors="errors.validation?.password" />
             </div>
 
-            <div class="mb-8">
+            <div>
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <Checkbox
@@ -125,7 +122,7 @@ onMounted(() => {
                 </div>
             </div>
 
-            <div class="flex justify-end items-center">
+            <div class="flex justify-end items-center pt-2">
                 <RouterLink
                     :to="{ name: 'forgotPassword' }"
                     class="mr-4 underline text-muted-color hover:text-color"

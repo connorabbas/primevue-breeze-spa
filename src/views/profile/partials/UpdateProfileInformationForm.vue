@@ -58,16 +58,7 @@ onMounted(() => {
                 :invalid="Boolean(errors.validation?.name)"
                 autocomplete="name"
             />
-            <template v-if="errors.validation?.name">
-                <Message
-                    v-for="errorMessage in errors.validation?.name"
-                    severity="error"
-                    variant="simple"
-                    size="small"
-                >
-                    {{ errorMessage }}
-                </Message>
-            </template>
+            <InputErrors :errors="errors.validation?.name" />
         </div>
         <div class="space-y-2">
             <label for="email">Email</label>
@@ -80,16 +71,7 @@ onMounted(() => {
                 :invalid="Boolean(errors.validation?.email)"
                 autocomplete="username"
             />
-            <template v-if="errors.validation?.email">
-                <Message
-                    v-for="errorMessage in errors.validation?.email"
-                    severity="error"
-                    variant="simple"
-                    size="small"
-                >
-                    {{ errorMessage }}
-                </Message>
-            </template>
+            <InputErrors :errors="errors.validation?.email" />
         </div>
 
         <div v-if="authStore.mustVerifyEmail && authStore.user.email_verified_at === null">

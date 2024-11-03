@@ -7,12 +7,14 @@ defineProps({
 </script>
 
 <template>
-    <div v-if="errors">
-        <p
+    <div v-if="errors" class="space-y-1">
+        <Message
             v-for="errorMessage in errors"
-            class="m-0 mb-1 text-sm text-red-500 dark:text-red-300"
+            severity="error"
+            variant="simple"
+            size="small"
         >
             {{ errorMessage }}
-        </p>
+        </Message>
     </div>
 </template>

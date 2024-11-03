@@ -49,16 +49,7 @@ const updatePassword = () => {
                 :invalid="Boolean(errors.validation?.current_password)"
                 autocomplete="current-password"
             />
-            <template v-if="errors.validation?.current_password">
-                <Message
-                    v-for="errorMessage in errors.validation?.current_password"
-                    severity="error"
-                    variant="simple"
-                    size="small"
-                >
-                    {{ errorMessage }}
-                </Message>
-            </template>
+            <InputErrors :errors="errors.validation?.current_password" />
         </div>
 
         <div class="space-y-2">
@@ -73,16 +64,7 @@ const updatePassword = () => {
                 :invalid="Boolean(errors.validation?.password)"
                 autocomplete="new-password"
             />
-            <template v-if="errors.validation?.password">
-                <Message
-                    v-for="errorMessage in errors.validation?.password"
-                    severity="error"
-                    variant="simple"
-                    size="small"
-                >
-                    {{ errorMessage }}
-                </Message>
-            </template>
+            <InputErrors :errors="errors.validation?.password" />
         </div>
 
         <div class="space-y-2">
@@ -96,16 +78,7 @@ const updatePassword = () => {
                 :invalid="Boolean(errors.validation?.password_confirmation)"
                 autocomplete="new-password"
             />
-            <template v-if="errors.validation?.password_confirmation">
-                <Message
-                    v-for="errorMessage in errors.validation?.password_confirmation"
-                    severity="error"
-                    variant="simple"
-                    size="small"
-                >
-                    {{ errorMessage }}
-                </Message>
-            </template>
+            <InputErrors :errors="errors.validation?.password_confirmation" />
         </div>
 
         <div class="flex items-center gap-4">

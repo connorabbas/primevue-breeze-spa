@@ -57,16 +57,7 @@ function focusPasswordInput() {
                     autocomplete="current-password"
                     @keyup.enter="deleteUser"
                 />
-                <template v-if="errors.validation?.password">
-                    <Message
-                        v-for="errorMessage in errors.validation?.password"
-                        severity="error"
-                        variant="simple"
-                        size="small"
-                    >
-                        {{ errorMessage }}
-                    </Message>
-                </template>
+                <InputErrors :errors="errors.validation?.password" />
             </div>
 
             <template #footer>
