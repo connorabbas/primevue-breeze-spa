@@ -6,7 +6,7 @@ import Container from '@/components/Container.vue';
 <template>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-bold text-xl leading-tight">Dashboard</h2>
+            <h1 class="font-bold text-2xl leading-tight">Dashboard</h1>
         </template>
         <Container>
             <div class="py-12">

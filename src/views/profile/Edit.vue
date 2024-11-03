@@ -9,7 +9,7 @@ import UpdateProfileInformationForm from './partials/UpdateProfileInformationFor
 <template>
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-bold text-xl leading-tight">Profile</h2>
+            <h1 class="font-bold text-2xl leading-tight">Profile</h1>
         </template>
 
         <Container>
