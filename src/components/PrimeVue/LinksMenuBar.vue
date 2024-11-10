@@ -8,7 +8,10 @@ defineExpose({
 </script>
 
 <template>
-    <Menubar ref="child-ref">
+    <Menubar
+        ref="child-ref"
+        breakpoint="1024px"
+    >
         <template
             v-if="$slots.start"
             #start
@@ -30,6 +33,7 @@ defineExpose({
                     @click="navigate"
                     :class="{
                         'font-bold text-primary': item.active,
+                        'text-muted-color': root && !item.active,
                     }"
                 >
                     <span
@@ -45,6 +49,9 @@ defineExpose({
                 :href="item.url"
                 :target="item.target"
                 v-bind="props.action"
+                :class="{
+                    'text-muted-color': root,
+                }"
             >
                 <span
                     v-show="item.icon"
@@ -54,13 +61,7 @@ defineExpose({
                 <span class="p-menu-item-label">{{ item.label }}</span>
                 <i
                     v-if="hasSubmenu"
-                    :class="[
-                        'pi pi-angle-down',
-                        {
-                            'pi-angle-down ml-2': root,
-                            'pi-angle-right ml-auto': !root,
-                        },
-                    ]"
+                    :class="['pi text-muted-color', root ? 'pi-angle-down text-xs' : 'pi-angle-right']"
                 ></i>
             </a>
         </template>

@@ -108,7 +108,7 @@ watchEffect(() => {
                             </div>
                         </template>
                         <template #end>
-                            <div class="hidden md:flex md:items-center md:ms-6">
+                            <div class="hidden lg:flex items-center ms-6">
                                 <ToggleThemeButton
                                     text
                                     severity="secondary"
@@ -129,20 +129,24 @@ watchEffect(() => {
                                         @click="toggleUserMenu($event)"
                                     >
                                         <span class="text-base">{{ authStore?.user?.name }}</span>
-                                        <i class="pi pi-angle-down ml-1"></i>
+                                        <i class="pi pi-angle-down"></i>
                                     </Button>
                                 </div>
                             </div>
 
                             <!-- Hamburger -->
-                            <div class="flex items-center md:hidden">
+                            <div class="flex items-center lg:hidden">
                                 <div class="relative">
                                     <Button
                                         text
-                                        rounded
                                         severity="secondary"
                                         icon="pi pi-bars"
                                         @click="mobileMenuOpen = true"
+                                        :pt="{
+                                            icon: {
+                                                class: 'text-xl',
+                                            },
+                                        }"
                                     />
                                 </div>
                             </div>

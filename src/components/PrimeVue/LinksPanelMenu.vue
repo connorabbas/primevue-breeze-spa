@@ -15,7 +15,7 @@
             },
         }"
     >
-        <template #item="{ item }">
+        <template #item="{ item, active }">
             <RouterLink
                 v-if="item.route"
                 v-slot="{ href, navigate }"
@@ -33,7 +33,7 @@
                     <span
                         v-show="item.icon"
                         :class="item.icon"
-                        class="mr-2"
+                        class="p-panelmenu-item-icon mr-2"
                     />
                     <span>{{ item.label }}</span>
                 </a>
@@ -47,12 +47,12 @@
                 <span
                     v-show="item.icon"
                     :class="item.icon"
-                    class="mr-2"
+                    class="p-panelmenu-item-icon mr-2"
                 />
                 <span>{{ item.label }}</span>
                 <span
                     v-if="item.items"
-                    class="pi pi-angle-down ml-auto"
+                    :class="['pi text-muted-color ml-auto', active ? 'pi-angle-down' : 'pi-angle-right']"
                 />
             </a>
         </template>
