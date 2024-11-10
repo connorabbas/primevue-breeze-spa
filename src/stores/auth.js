@@ -1,10 +1,10 @@
+import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import router from '@/router';
 import axios from '@/utils/axios';
 import progress from '@/utils/progress';
-import { useStorage } from '@vueuse/core';
 
 export const useAuthStore = defineStore('auth', () => {
     const { setFlashMessage } = useFlashMessage();
@@ -12,9 +12,10 @@ export const useAuthStore = defineStore('auth', () => {
 
     const mustVerifyEmail = false;
 
-    const user = useStorage('authenticatedUser', null); // user persisted in case page is manually reloaded
+    const user = ref(null);
 
     function fetchUser() {
+        progress.start();
         return axios
             .get('/api/user')
             .then((response) => {
@@ -27,6 +28,9 @@ export const useAuthStore = defineStore('auth', () => {
                 if (error.request || (error.response && error.response.status === 401)) {
                     user.value = null;
                 }
+            })
+            .finally(() => {
+                progress.done();
             });
     }
     function getCsrfCookie() {

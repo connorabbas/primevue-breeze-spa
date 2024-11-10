@@ -21,12 +21,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
     progress.start();
-
-    // Fetch user if authenticated
     const authStore = useAuthStore();
-    if (authStore.user) {
-        await authStore.fetchUser();
-    }
 
     // Run middleware pipeline
     const context = { to, from, authStore };

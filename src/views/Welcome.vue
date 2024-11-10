@@ -4,6 +4,7 @@ import { useAuthStore } from '@/stores/auth';
 import { Card } from 'primevue';
 
 const authStore = useAuthStore();
+await authStore.fetchUser();
 </script>
 
 <template>
