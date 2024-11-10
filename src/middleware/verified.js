@@ -1,4 +1,7 @@
 export default async function verified({ to, from, authStore }) {
+    if (!authStore.user) {
+        await authStore.fetchUser();
+    }
     if (
         authStore.mustVerifyEmail &&
         new Boolean(authStore.user?.id) &&
