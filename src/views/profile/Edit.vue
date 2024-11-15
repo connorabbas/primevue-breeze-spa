@@ -13,7 +13,7 @@ import UpdateProfileInformationForm from './partials/UpdateProfileInformationFor
         </template>
 
         <Container>
-            <div class="py-12">
+            <div class="py-4 md:py-8">
                 <div class="space-y-6">
                     <Card
                         :pt="{
