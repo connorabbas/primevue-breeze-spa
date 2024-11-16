@@ -104,29 +104,45 @@ watchEffect(() => {
                             </div>
                         </template>
                         <template #end>
-                            <div class="hidden lg:flex items-center ms-6">
-                                <ToggleThemeButton
-                                    text
-                                    severity="secondary"
-                                    rounded
-                                />
+                            <div class="hidden lg:flex items-center ms-6 space-x-3">
+                                <div>
+                                    <ToggleThemeButton
+                                        text
+                                        severity="secondary"
+                                        rounded
+                                        :pt="{
+                                            icon: {
+                                                class: 'text-muted-color',
+                                            },
+                                        }"
+                                    />
+                                </div>
                                 <!-- User Dropdown Menu -->
-                                <div class="ms-3 relative">
+                                <div class="flex flex-col">
+                                    <Button
+                                        text
+                                        severity="secondary"
+                                        @click="toggleUserMenu($event)"
+                                    >
+                                        <span class="text-muted-color">{{ authStore?.user?.name }}</span>
+                                        <i class="pi pi-angle-down text-muted-color"></i>
+                                    </Button>
+                                    <div
+                                        id="user-menu-append"
+                                        class="relative"
+                                    ></div>
                                     <LinksMenu
+                                        appendTo="#user-menu-append"
                                         :model="userMenuItems"
                                         popup
                                         ref="user-menu"
                                         class="shadow"
+                                        :pt="{
+                                            root: {
+                                                class: '!left-auto !top-0 right-0',
+                                            },
+                                        }"
                                     />
-                                    <Button
-                                        text
-                                        size="small"
-                                        severity="secondary"
-                                        @click="toggleUserMenu($event)"
-                                    >
-                                        <span class="text-base">{{ authStore?.user?.name }}</span>
-                                        <i class="pi pi-angle-down"></i>
-                                    </Button>
                                 </div>
                             </div>
 
