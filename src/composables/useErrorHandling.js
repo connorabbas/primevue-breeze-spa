@@ -1,4 +1,5 @@
 import { reactive, computed } from 'vue';
+import router from '@/router';
 import { useToast } from 'primevue/usetoast';
 
 export function useErrorHandling() {
@@ -30,7 +31,9 @@ export function useErrorHandling() {
             const status = error.response.status;
             const data = error.response.data;
 
-            if (status === 422 && data.errors) {
+            if (status === 419) {
+                router.push({ name: 'login' });
+            } else if (status === 422 && data.errors) {
                 for (const key in data.errors) {
                     errors.validation[key] = data.errors[key];
                 }

@@ -1,5 +1,6 @@
 <script setup>
 import { useTemplateRef, reactive, computed, onMounted } from 'vue';
+import axios from '@/utils/axios';
 import { useToast } from 'primevue/usetoast';
 import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useAuthStore } from '@/stores/auth';
@@ -24,13 +25,23 @@ const form = reactive({
 });
 
 const updateProfileInformation = () => {
-    // Breeze API installation does not include profile related routes/functionality, implement as needed...
-    toast.add({
-        severity: 'success',
-        summary: 'Saved',
-        detail: 'Profile information has been updated',
-        life: 3000,
-    });
+    form.processing = true;
+    axios
+        .patch('/profile', form.data)
+        .then(async () => {
+            clearErrors();
+            await authStore.fetchUser();
+            toast.add({
+                severity: 'success',
+                summary: 'Saved',
+                detail: 'Profile information has been updated',
+                life: 3000,
+            });
+        })
+        .catch((error) => handleAxiosError(error))
+        .finally(() => {
+            form.processing = false;
+        });
 };
 const resendVerifyEmail = () => {
     authStore.sendVerificationEmail().catch((error) => handleAxiosError(error));

@@ -24,10 +24,10 @@ export const useAuthStore = defineStore('auth', () => {
                 }
             })
             .catch((error) => {
-                handleAxiosError(error);
                 if (error.request || (error.response && error.response.status === 401)) {
                     user.value = null;
                 }
+                handleAxiosError(error);
             })
             .finally(() => {
                 progress.done();
