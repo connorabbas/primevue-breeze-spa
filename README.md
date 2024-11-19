@@ -17,7 +17,7 @@ An alternative to using my [Inertia](https://github.com/connorabbas/primevue-bre
     SANCTUM_STATEFUL_DOMAINS="vue-spa.breeze-api.localhost"
     SESSION_DOMAIN=".breeze-api.localhost"
     ```
-6. Setup additional routes and controllers for profile page in your Laravel project:
+6. Setup additional routes and controllers for profile page in the Laravel API project:
     ```
     php artisan make:controller ProfileController
     ```
