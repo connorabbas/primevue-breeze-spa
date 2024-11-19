@@ -1,10 +1,11 @@
 <script setup>
 import { ref, useTemplateRef, reactive } from 'vue';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 import { useAxiosForm } from '@/composables/useAxiosForm';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import InputErrors from '@/components/InputErrors.vue';
 
+const router = useRouter();
 const { setFlashMessage } = useFlashMessage();
 
 const passwordInput = useTemplateRef('password-input');

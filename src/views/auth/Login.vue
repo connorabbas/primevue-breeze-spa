@@ -1,12 +1,13 @@
 <script setup>
 import { useTemplateRef, computed, onMounted } from 'vue';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 import { useAxiosForm } from '@/composables/useAxiosForm';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
+const router = useRouter();
 const authStore = useAuthStore();
 const { flashMessages } = useFlashMessage();
 

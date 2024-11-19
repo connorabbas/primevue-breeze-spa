@@ -2,9 +2,10 @@ import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import { useAxiosForm } from '@/composables/useAxiosForm';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 
 export const useAuthStore = defineStore('auth', () => {
+    const router = useRouter();
     const { setFlashMessage } = useFlashMessage();
 
     const mustVerifyEmail = false;

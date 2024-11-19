@@ -1,11 +1,9 @@
 <script setup>
-import { useTemplateRef, reactive, onMounted } from 'vue';
-import axios from '@/utils/axios';
-import { useAxiosErrorHandling } from '@/composables/useAxiosErrorHandling';
+import { useTemplateRef, computed, onMounted } from 'vue';
+import { useAxiosForm } from '@/composables/useAxiosForm';
 import { useAuthStore } from '@/stores/auth';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
-import router from '@/router';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
@@ -16,41 +14,39 @@ const props = defineProps({
     },
 });
 
+const router = useRouter();
 const route = useRoute();
 const authStore = useAuthStore();
-const { validationErrors: errors, clearErrors, handleAxiosError } = useAxiosErrorHandling();
 const { setFlashMessage } = useFlashMessage();
 
 const emailInput = useTemplateRef('email-input');
 
-const form = reactive({
-    processing: false,
-    data: {
-        token: props.token,
-        email: route.query?.email ?? '',
-        password: '',
-        password_confirmation: '',
-    },
+const {
+    data: formData,
+    validationErrors,
+    processing: resetting,
+    post: submitForm,
+} = useAxiosForm({
+    token: props.token,
+    email: route.query?.email ?? '',
+    password: '',
+    password_confirmation: '',
 });
-
 const submit = () => {
-    form.processing = true;
-    authStore
-        .fetchCsrfCookie()
-        .then(() => {
-            return axios.post('/reset-password', form.data);
-        })
-        .then((response) => {
-            clearErrors();
-            router.push({ name: 'login' }).then(() => {
-                setFlashMessage('success', response.data.status);
-            });
-        })
-        .catch((error) => handleAxiosError(error))
-        .finally(() => {
-            form.processing = false;
+    authStore.fetchCsrfCookie().then(() => {
+        submitForm('/reset-password', {
+            onSuccess: (response) => {
+                router.push({ name: 'login' }).then(() => {
+                    setFlashMessage('success', response.data.status);
+                });
+            },
         });
+    });
 };
+
+const loading = computed(() => {
+    return resetting.value || authStore.fetchingCsrfToken.value;
+});
 
 onMounted(() => {
     emailInput.value.$el.focus();
@@ -74,12 +70,12 @@ onMounted(() => {
                     ref="email-input"
                     id="email"
                     type="email"
-                    v-model="form.data.email"
+                    v-model="formData.email"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.email)"
+                    :invalid="Boolean(validationErrors?.email)"
                     autocomplete="username"
                 />
-                <InputErrors :errors="errors.validation?.email" />
+                <InputErrors :errors="validationErrors?.email" />
             </div>
 
             <div class="space-y-2">
@@ -91,13 +87,13 @@ onMounted(() => {
                 <InputText
                     id="password"
                     type="password"
-                    v-model="form.data.password"
+                    v-model="formData.password"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.password)"
+                    :invalid="Boolean(validationErrors?.password)"
                     required
                     autocomplete="new-password"
                 />
-                <InputErrors :errors="errors.validation?.password" />
+                <InputErrors :errors="validationErrors?.password" />
             </div>
 
             <div class="space-y-2">
@@ -109,20 +105,20 @@ onMounted(() => {
                 <InputText
                     id="password_confirmation"
                     type="password"
-                    v-model="form.data.password_confirmation"
+                    v-model="formData.password_confirmation"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.password_confirmation)"
+                    :invalid="Boolean(validationErrors?.password_confirmation)"
                     required
                     autocomplete="new-password"
                 />
-                <InputErrors :errors="errors.validation?.password_confirmation" />
+                <InputErrors :errors="validationErrors?.password_confirmation" />
             </div>
 
             <div class="flex justify-end items-center pt-2">
                 <Button
                     raised
                     type="submit"
-                    :loading="form.processing"
+                    :loading="loading"
                     label="Reset Password"
                     severity="contrast"
                 />

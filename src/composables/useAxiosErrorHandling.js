@@ -1,8 +1,9 @@
 import { ref } from 'vue';
-import router from '@/router';
+import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 
 export function useAxiosErrorHandling() {
+    const router = useRouter();
     const toast = useToast();
     const validationErrors = ref({});
 

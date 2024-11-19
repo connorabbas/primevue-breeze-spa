@@ -1,41 +1,37 @@
 <script setup>
-import { useTemplateRef, reactive, onMounted } from 'vue';
-import axios from '@/utils/axios';
-import { useAxiosErrorHandling } from '@/composables/useAxiosErrorHandling';
+import { useTemplateRef, computed, onMounted } from 'vue';
+import { useAxiosForm } from '@/composables/useAxiosForm';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
 const authStore = useAuthStore();
-const { validationErrors: errors, clearErrors, handleAxiosError } = useAxiosErrorHandling();
 const { flashMessages, setFlashMessage } = useFlashMessage();
 
 const emailInput = useTemplateRef('email-input');
 
-const form = reactive({
-    processing: false,
-    data: {
-        email: '',
-    },
+const {
+    data: formData,
+    validationErrors,
+    processing: submittingRequest,
+    post: submitForm,
+} = useAxiosForm({
+    email: '',
 });
-
-const submit = () => {
-    form.processing = true;
-    authStore
-        .fetchCsrfCookie()
-        .then(() => {
-            return axios.post('/forgot-password', form.data);
-        })
-        .then((response) => {
-            clearErrors();
-            setFlashMessage('success', response.data.status);
-        })
-        .catch((error) => handleAxiosError(error))
-        .finally(() => {
-            form.processing = false;
+const requestPasswordReset = () => {
+    authStore.fetchCsrfCookie().then(() => {
+        submitForm('/forgot-password', {
+            onSuccess: (response) => {
+                setFlashMessage('success', response.data.status);
+            },
         });
+    });
 };
+
+const loading = computed(() => {
+    return submittingRequest.value || authStore.fetchingCsrfToken.value;
+});
 
 onMounted(() => {
     emailInput.value.$el.focus();
@@ -63,7 +59,7 @@ onMounted(() => {
         </div>
 
         <form
-            @submit.prevent="submit"
+            @submit.prevent="requestPasswordReset"
             class="space-y-6"
         >
             <div class="space-y-2">
@@ -77,19 +73,19 @@ onMounted(() => {
                     ref="email-input"
                     id="email"
                     type="email"
-                    v-model="form.data.email"
+                    v-model="formData.email"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.email)"
+                    :invalid="Boolean(validationErrors?.email)"
                     autocomplete="username"
                 />
-                <InputErrors :errors="errors.validation?.email" />
+                <InputErrors :errors="validationErrors?.email" />
             </div>
 
             <div class="flex justify-end items-center">
                 <Button
                     raised
                     type="submit"
-                    :loading="form.processing"
+                    :loading="loading"
                     label="Email Password Reset Link"
                     severity="contrast"
                 />
