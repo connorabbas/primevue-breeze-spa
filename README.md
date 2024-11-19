@@ -68,7 +68,7 @@ An alternative to using my [Inertia](https://github.com/connorabbas/primevue-bre
         */
         public function destroy(Request $request): Response
         {
-            $request->validateWithBag('userDeletion', [
+            $request->validate([
                 'password' => ['required', 'current_password'],
             ]);
 
