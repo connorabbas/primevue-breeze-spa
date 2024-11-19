@@ -19,7 +19,7 @@ const {
 } = useAxiosForm({
     email: '',
 });
-const requestPasswordReset = () => {
+const submit = () => {
     authStore.fetchCsrfCookie().then(() => {
         submitForm('/forgot-password', {
             onSuccess: (response) => {
@@ -59,7 +59,7 @@ onMounted(() => {
         </div>
 
         <form
-            @submit.prevent="requestPasswordReset"
+            @submit.prevent="submit"
             class="space-y-6"
         >
             <div class="space-y-2">

@@ -22,7 +22,7 @@ const {
     password: '',
     password_confirmation: '',
 });
-const registerUserAccount = () => {
+const submit = () => {
     authStore.fetchCsrfCookie().then(() => {
         submitForm('/register', {
             onSuccess: () => {
@@ -44,7 +44,7 @@ onMounted(() => {
 <template>
     <GuestLayout>
         <form
-            @submit.prevent="registerUserAccount"
+            @submit.prevent="submit"
             class="space-y-6"
         >
             <div class="space-y-2">

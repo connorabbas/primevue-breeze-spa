@@ -23,7 +23,7 @@ const {
     password_confirmation: '',
 });
 
-const updatePassword = () => {
+const submit = () => {
     submitForm('/password', {
         onSuccess: async () => {
             await authStore.fetchUser();
@@ -51,7 +51,7 @@ const updatePassword = () => {
 
 <template>
     <form
-        @submit.prevent="updatePassword"
+        @submit.prevent="submit"
         class="space-y-6"
     >
         <div class="space-y-2">

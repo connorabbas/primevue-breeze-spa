@@ -24,7 +24,7 @@ const {
     password: '',
     remember: false,
 });
-const login = () => {
+const submit = () => {
     authStore.fetchCsrfCookie().then(() => {
         submitForm('/login', {
             onSuccess: () => {
@@ -66,7 +66,7 @@ onMounted(() => {
             </Message>
         </template>
         <form
-            @submit.prevent="login"
+            @submit.prevent="submit"
             class="space-y-6"
         >
             <div class="space-y-2">

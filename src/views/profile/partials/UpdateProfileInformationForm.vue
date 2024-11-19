@@ -23,7 +23,7 @@ const {
     name: authStore.user.name || '',
     email: authStore.user.email || '',
 });
-const updateProfileInformation = () => {
+const submit = () => {
     submitForm('/profile', {
         onSuccess: async () => {
             await authStore.fetchUser();
@@ -48,7 +48,7 @@ onMounted(() => {
 
 <template>
     <form
-        @submit.prevent="updateProfileInformation"
+        @submit.prevent="submit"
         class="space-y-6"
     >
         <div class="space-y-2">
