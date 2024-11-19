@@ -17,6 +17,129 @@ An alternative to using my [Inertia](https://github.com/connorabbas/primevue-bre
     SANCTUM_STATEFUL_DOMAINS="vue-spa.breeze-api.localhost"
     SESSION_DOMAIN=".breeze-api.localhost"
     ```
+6. Setup additional routes and controllers for profile page in the Laravel API project:
+    ```
+    php artisan make:controller ProfileController
+    ```
+    ```php
+    <?php
+
+    namespace App\Http\Controllers;
+
+    use App\Models\User;
+    use Illuminate\Http\Request;
+    use Illuminate\Http\Response;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Validation\Rule;
+    use Illuminate\View\View;
+
+    class ProfileController extends Controller
+    {
+        /**
+        * Update the user's profile information.
+        */
+        public function update(Request $request): Response
+        {
+            $validated = $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => [
+                    'required',
+                    'string',
+                    'lowercase',
+                    'email',
+                    'max:255',
+                    Rule::unique(User::class)->ignore($request->user()->id),
+                ],
+            ]);
+
+            $request->user()->fill($validated);
+
+            if ($request->user()->isDirty('email')) {
+                $request->user()->email_verified_at = null;
+            }
+
+            $request->user()->save();
+
+            return response()->noContent();
+        }
+
+        /**
+        * Delete the user's account.
+        */
+        public function destroy(Request $request): Response
+        {
+            $request->validateWithBag('userDeletion', [
+                'password' => ['required', 'current_password'],
+            ]);
+
+            $user = $request->user();
+
+            Auth::logout();
+
+            $user->delete();
+
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return response()->noContent();
+        }
+    }
+
+    ```
+    ```
+    php artisan make:controller Auth/PasswordController
+    ```
+    ```php
+    <?php
+
+    namespace App\Http\Controllers\Auth;
+
+    use App\Http\Controllers\Controller;
+    use Illuminate\Http\Request;
+    use Illuminate\Http\Response;
+    use Illuminate\Support\Facades\Auth;
+    use Illuminate\Support\Facades\Hash;
+    use Illuminate\Validation\Rules\Password;
+
+    class PasswordController extends Controller
+    {
+        /**
+        * Update the user's password.
+        */
+        public function update(Request $request): Response
+        {
+            $validated = $request->validate([
+                'current_password' => ['required', 'current_password'],
+                'password' => ['required', Password::defaults(), 'confirmed'],
+            ]);
+
+            $request->user()->update([
+                'password' => Hash::make($validated['password']),
+            ]);
+
+            if ($request->session()->has('password_hash_web')) {
+                $user = Auth::user();
+                $request->session()->forget('password_hash_web');
+                Auth::login($user);
+            }
+
+            return response()->noContent();
+        }
+    }
+
+    ```
+    ```php
+    Route::controller(App\Http\Controllers\ProfileController::class)
+        ->middleware('auth')
+        ->group(function () {
+            Route::patch('/profile', 'update')->name('profile.update');
+            Route::delete('/profile', 'destroy')->name('profile.destroy');
+        });
+
+    Route::put('password', [App\Http\Controllers\Auth\PasswordController::class, 'update'])
+        ->middleware('auth')
+        ->name('password.update');
+    ```
 
 ## Theme
 This starter kit provides a light/dark mode and custom theme functionality provided by the powerful PrimeVue theming system, using styled mode and custom design token values.

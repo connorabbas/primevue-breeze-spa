@@ -1,40 +1,57 @@
 <script setup>
-import { useTemplateRef, reactive } from 'vue';
+import { useTemplateRef } from 'vue';
 import { useToast } from 'primevue/usetoast';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAxiosForm } from '@/composables/useAxiosForm';
 import { useAuthStore } from '@/stores/auth';
 import InputErrors from '@/components/InputErrors.vue';
 
 const toast = useToast();
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
 
 const currentPasswordInput = useTemplateRef('current-password-input');
 const newPasswordInput = useTemplateRef('new-password-input');
 
-const form = reactive({
-    processing: false,
-    data: {
-        current_password: '',
-        password: '',
-        password_confirmation: '',
-    },
+const {
+    data: formData,
+    validationErrors,
+    processing: updating,
+    put: submitForm,
+    reset: resetFormFields,
+} = useAxiosForm({
+    current_password: '',
+    password: '',
+    password_confirmation: '',
 });
 
-const updatePassword = () => {
-    // Breeze API installation does not include profile related routes/functionality, implement as needed...
-    toast.add({
-        severity: 'success',
-        summary: 'Saved',
-        detail: 'Your password has been updated',
-        life: 3000,
+const submit = () => {
+    submitForm('/password', {
+        onSuccess: async () => {
+            await authStore.fetchUser();
+            toast.add({
+                severity: 'success',
+                summary: 'Saved',
+                detail: 'Your password has been updated',
+                life: 3000,
+            });
+            resetFormFields();
+        },
+        onError: () => {
+            if (validationErrors.value?.password) {
+                resetFormFields('password', 'password_confirmation');
+                newPasswordInput.value.$el.focus();
+            }
+            if (validationErrors.value?.current_password) {
+                resetFormFields('current_password');
+                currentPasswordInput.value.$el.focus();
+            }
+        },
     });
 };
 </script>
 
 <template>
     <form
-        @submit.prevent="updatePassword"
+        @submit.prevent="submit"
         class="space-y-6"
     >
         <div class="space-y-2">
@@ -44,12 +61,12 @@ const updatePassword = () => {
                 id="current_password"
                 ref="current-password-input"
                 type="password"
-                v-model="form.data.current_password"
+                v-model="formData.current_password"
                 class="w-full"
-                :invalid="Boolean(errors.validation?.current_password)"
+                :invalid="Boolean(validationErrors?.current_password)"
                 autocomplete="current-password"
             />
-            <InputErrors :errors="errors.validation?.current_password" />
+            <InputErrors :errors="validationErrors?.current_password" />
         </div>
 
         <div class="space-y-2">
@@ -59,12 +76,12 @@ const updatePassword = () => {
                 id="password"
                 ref="new-password-input"
                 type="password"
-                v-model="form.data.password"
+                v-model="formData.password"
                 class="w-full"
-                :invalid="Boolean(errors.validation?.password)"
+                :invalid="Boolean(validationErrors?.password)"
                 autocomplete="new-password"
             />
-            <InputErrors :errors="errors.validation?.password" />
+            <InputErrors :errors="validationErrors?.password" />
         </div>
 
         <div class="space-y-2">
@@ -73,36 +90,22 @@ const updatePassword = () => {
                 required
                 id="password_confirmation"
                 type="password"
-                v-model="form.data.password_confirmation"
+                v-model="formData.password_confirmation"
                 class="w-full"
-                :invalid="Boolean(errors.validation?.password_confirmation)"
+                :invalid="Boolean(validationErrors?.password_confirmation)"
                 autocomplete="new-password"
             />
-            <InputErrors :errors="errors.validation?.password_confirmation" />
+            <InputErrors :errors="validationErrors?.password_confirmation" />
         </div>
 
         <div class="flex items-center gap-4">
             <Button
                 raised
                 type="submit"
-                :loading="form.processing"
+                :loading="updating"
                 label="Save"
                 severity="contrast"
             />
-
-            <Transition
-                enter-active-class="transition ease-in-out"
-                enter-from-class="opacity-0"
-                leave-active-class="transition ease-in-out"
-                leave-to-class="opacity-0"
-            >
-                <p
-                    v-if="form.recentlySuccessful"
-                    class="text-sm text-muted-color"
-                >
-                    Saved.
-                </p>
-            </Transition>
         </div>
     </form>
 </template>

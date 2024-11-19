@@ -1,44 +1,40 @@
 <script setup>
-import { useTemplateRef, reactive, onMounted } from 'vue';
-import router from '@/router';
-import axios from '@/utils/axios';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useTemplateRef, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { useAxiosForm } from '@/composables/useAxiosForm';
 import { useAuthStore } from '@/stores/auth';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
+const router = useRouter();
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 
 const nameInput = useTemplateRef('name-input');
 
-const form = reactive({
-    processing: false,
-    data: {
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
-    },
+const {
+    data: formData,
+    validationErrors,
+    processing: registering,
+    post: submitForm,
+} = useAxiosForm({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
 });
-
 const submit = () => {
-    form.processing = true;
-    authStore
-        .getCsrfCookie()
-        .then(() => {
-            return axios.post('/register', form.data);
-        })
-        .then(async (response) => {
-            clearErrors();
-            await authStore.fetchUser();
-            router.push({ name: 'dashboard' });
-        })
-        .catch((error) => handleAxiosError(error))
-        .finally(() => {
-            form.processing = false;
+    authStore.fetchCsrfCookie().then(() => {
+        submitForm('/register', {
+            onSuccess: () => {
+                router.push({ name: 'dashboard' });
+            },
         });
+    });
 };
+
+const loading = computed(() => {
+    return registering.value || authStore.fetchingCsrfToken.value;
+});
 
 onMounted(() => {
     nameInput.value.$el.focus();
@@ -61,13 +57,13 @@ onMounted(() => {
                     ref="name-input"
                     id="name"
                     type="text"
-                    v-model="form.data.name"
+                    v-model="formData.name"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.name)"
+                    :invalid="Boolean(validationErrors?.name)"
                     required
                     autocomplete="name"
                 />
-                <InputErrors :errors="errors.validation?.name" />
+                <InputErrors :errors="validationErrors?.name" />
             </div>
 
             <div class="space-y-2">
@@ -79,13 +75,13 @@ onMounted(() => {
                 <InputText
                     id="email"
                     type="email"
-                    v-model="form.data.email"
+                    v-model="formData.email"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.email)"
+                    :invalid="Boolean(validationErrors?.email)"
                     required
                     autocomplete="username"
                 />
-                <InputErrors :errors="errors.validation?.email" />
+                <InputErrors :errors="validationErrors?.email" />
             </div>
 
             <div class="space-y-2">
@@ -97,13 +93,13 @@ onMounted(() => {
                 <InputText
                     id="password"
                     type="password"
-                    v-model="form.data.password"
+                    v-model="formData.password"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.password)"
+                    :invalid="Boolean(validationErrors?.password)"
                     required
                     autocomplete="new-password"
                 />
-                <InputErrors :errors="errors.validation?.password" />
+                <InputErrors :errors="validationErrors?.password" />
             </div>
 
             <div class="space-y-2">
@@ -115,13 +111,13 @@ onMounted(() => {
                 <InputText
                     id="password_confirmation"
                     type="password"
-                    v-model="form.data.password_confirmation"
+                    v-model="formData.password_confirmation"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.password_confirmation)"
+                    :invalid="Boolean(validationErrors?.password_confirmation)"
                     required
                     autocomplete="new-password"
                 />
-                <InputErrors :errors="errors.validation?.password_confirmation" />
+                <InputErrors :errors="validationErrors?.password_confirmation" />
             </div>
 
             <div class="flex justify-end items-center pt-2">
@@ -134,7 +130,7 @@ onMounted(() => {
                 <Button
                     raised
                     type="submit"
-                    :loading="form.processing"
+                    :loading="loading"
                     label="Register"
                     severity="contrast"
                 />
