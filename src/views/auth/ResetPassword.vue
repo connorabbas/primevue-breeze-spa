@@ -1,7 +1,7 @@
 <script setup>
 import { useTemplateRef, reactive, onMounted } from 'vue';
 import axios from '@/utils/axios';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAxiosErrorHandling } from '@/composables/useAxiosErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import { useRoute } from 'vue-router';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
@@ -18,7 +18,7 @@ const props = defineProps({
 
 const route = useRoute();
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors } = useErrorHandling();
+const { validationErrors: errors, clearErrors, handleAxiosError } = useAxiosErrorHandling();
 const { setFlashMessage } = useFlashMessage();
 
 const emailInput = useTemplateRef('email-input');
@@ -36,7 +36,7 @@ const form = reactive({
 const submit = () => {
     form.processing = true;
     authStore
-        .getCsrfCookie()
+        .fetchCsrfCookie()
         .then(() => {
             return axios.post('/reset-password', form.data);
         })

@@ -1,64 +1,64 @@
 import { ref } from 'vue';
 import { defineStore } from 'pinia';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAxiosForm } from '@/composables/useAxiosForm';
 import router from '@/router';
-import axios from '@/utils/axios';
-import progress from '@/utils/progress';
 
 export const useAuthStore = defineStore('auth', () => {
     const { setFlashMessage } = useFlashMessage();
-    const { handleAxiosError } = useErrorHandling();
 
     const mustVerifyEmail = false;
 
     const user = ref(null);
 
+    const { get: submitFetchUserForm, processing: fetchingUser } = useAxiosForm();
     function fetchUser() {
-        progress.start();
-        return axios
-            .get('/api/user')
-            .then((response) => {
-                if (response.status === 200) {
+        return submitFetchUserForm('/api/user', {
+            onSuccess: (response) => {
+                if (response.status >= 200) {
                     user.value = response.data;
                 }
-            })
-            .catch((error) => {
+            },
+            onError: (error) => {
                 if (error.request || (error.response && error.response.status === 401)) {
                     user.value = null;
                 }
-                handleAxiosError(error);
-            })
-            .finally(() => {
-                progress.done();
-            });
-    }
-    function getCsrfCookie() {
-        return axios.get('/sanctum/csrf-cookie');
-    }
-    function sendVerificationEmail() {
-        return axios.post('/email/verification-notification').then((response) => {
-            setFlashMessage('success', response.data.status);
+            },
         });
     }
+
+    const { get: submitFetchCsrfCookie, processing: fetchingCsrfToken } = useAxiosForm();
+    function fetchCsrfCookie() {
+        return submitFetchCsrfCookie('/sanctum/csrf-cookie');
+    }
+
+    const { post: submitVerificationEmailForm, processing: sendingVerificationEmail } = useAxiosForm();
+    function sendVerificationEmail() {
+        return submitVerificationEmailForm('/email/verification-notification', {
+            onSuccess: (response) => {
+                setFlashMessage('success', response.data.status);
+            },
+        });
+    }
+
+    const { post: submitLogoutForm } = useAxiosForm();
     function logout() {
-        progress.start();
-        return axios
-            .post('/logout')
-            .then((response) => {
+        return submitLogoutForm('/logout', {
+            onSuccess: (response) => {
                 user.value = null;
                 router.push({ name: 'welcome' });
-            })
-            .finally(() => {
-                progress.done();
-            });
+            },
+        });
     }
 
     return {
         mustVerifyEmail,
         user,
+        fetchingUser,
+        fetchingCsrfToken,
+        sendingVerificationEmail,
         fetchUser,
-        getCsrfCookie,
+        fetchCsrfCookie,
         sendVerificationEmail,
         logout,
     };

@@ -2,13 +2,13 @@
 import { useTemplateRef, reactive, onMounted } from 'vue';
 import router from '@/router';
 import axios from '@/utils/axios';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAxiosErrorHandling } from '@/composables/useAxiosErrorHandling';
 import { useAuthStore } from '@/stores/auth';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors } = useErrorHandling();
+const { validationErrors: errors, clearErrors, handleAxiosError } = useAxiosErrorHandling();
 
 const nameInput = useTemplateRef('name-input');
 
@@ -25,7 +25,7 @@ const form = reactive({
 const submit = () => {
     form.processing = true;
     authStore
-        .getCsrfCookie()
+        .fetchCsrfCookie()
         .then(() => {
             return axios.post('/register', form.data);
         })

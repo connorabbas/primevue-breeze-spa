@@ -1,26 +1,16 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useAuthStore } from '@/stores/auth';
-import { useErrorHandling } from '@/composables/useErrorHandling';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 const { flashMessages } = useFlashMessage();
-
-const processing = ref(false);
 
 const verificationLinkSent = computed(() => flashMessages.success === 'verification-link-sent');
 
 const submit = () => {
-    processing.value = true;
-    authStore
-        .sendVerificationEmail()
-        .catch((error) => handleAxiosError(error))
-        .finally(() => {
-            processing.value = false;
-        });
+    authStore.sendVerificationEmail();
 };
 </script>
 
@@ -49,7 +39,7 @@ const submit = () => {
                 <Button
                     raised
                     type="submit"
-                    :loading="processing"
+                    :loading="authStore.sendingVerificationEmail"
                     label="Resend Verification Email"
                     severity="contrast"
                 />

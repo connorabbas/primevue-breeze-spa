@@ -1,52 +1,49 @@
 <script setup>
-import { useTemplateRef, reactive, onMounted } from 'vue';
+import { useTemplateRef, computed, onMounted } from 'vue';
 import router from '@/router';
-import axios from '@/utils/axios';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAxiosForm } from '@/composables/useAxiosForm';
 import { useAuthStore } from '@/stores/auth';
 import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import InputErrors from '@/components/InputErrors.vue';
 
 const authStore = useAuthStore();
-const { errors, handleAxiosError, clearErrors } = useErrorHandling();
 const { flashMessages } = useFlashMessage();
 
-const emailInput = useTemplateRef('email-input');
-
-const form = reactive({
-    processing: false,
-    data: {
-        email: '',
-        password: '',
-        remember: false,
-    },
+const {
+    data: formData,
+    validationErrors,
+    processing: loggingIn,
+    post: submitForm,
+    reset: resetFormData,
+} = useAxiosForm({
+    email: '',
+    password: '',
+    remember: false,
 });
-
-const submit = () => {
-    form.processing = true;
-    authStore
-        .getCsrfCookie()
-        .then(() => {
-            return axios.post('/login', form.data);
-        })
-        .then(async (response) => {
-            clearErrors();
-            await authStore.fetchUser();
-            const redirectPath = router.currentRoute.value.query?.redirect;
-            if (redirectPath) {
-                router.push({ path: redirectPath });
-            } else {
-                router.push({ name: 'dashboard' });
-            }
-        })
-        .catch((error) => handleAxiosError(error))
-        .finally(() => {
-            form.processing = false;
-            form.data.password = null;
+const login = () => {
+    authStore.fetchCsrfCookie().then(() => {
+        submitForm('/login', {
+            onSuccess: () => {
+                const redirectPath = router.currentRoute.value.query?.redirect;
+                if (redirectPath) {
+                    router.push({ path: redirectPath });
+                } else {
+                    router.push({ name: 'dashboard' });
+                }
+            },
+            onFinish: () => {
+                resetFormData('password');
+            },
         });
+    });
 };
 
+const loading = computed(() => {
+    return loggingIn.value || authStore.fetchingCsrfToken.value;
+});
+
+const emailInput = useTemplateRef('email-input');
 onMounted(() => {
     emailInput.value.$el.focus();
 });
@@ -66,9 +63,8 @@ onMounted(() => {
                 {{ flashMessages.success }}
             </Message>
         </template>
-
         <form
-            @submit.prevent="submit"
+            @submit.prevent="login"
             class="space-y-6"
         >
             <div class="space-y-2">
@@ -82,12 +78,12 @@ onMounted(() => {
                     ref="email-input"
                     id="email"
                     type="email"
-                    v-model="form.data.email"
+                    v-model="formData.email"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.email)"
+                    :invalid="Boolean(validationErrors.email)"
                     autocomplete="username"
                 />
-                <InputErrors :errors="errors.validation?.email" />
+                <InputErrors :errors="validationErrors.email" />
             </div>
 
             <div class="space-y-2">
@@ -100,12 +96,12 @@ onMounted(() => {
                     required
                     id="password"
                     type="password"
-                    v-model="form.data.password"
+                    v-model="formData.password"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.password)"
+                    :invalid="Boolean(validationErrors.password)"
                     autocomplete="current-password"
                 />
-                <InputErrors :errors="errors.validation?.password" />
+                <InputErrors :errors="validationErrors.password" />
             </div>
 
             <div>
@@ -114,7 +110,7 @@ onMounted(() => {
                         <Checkbox
                             id="remember"
                             :binary="true"
-                            v-model="form.remember"
+                            v-model="formData.remember"
                             class="mr-2"
                         ></Checkbox>
                         <label for="remember">Remember me</label>
@@ -132,7 +128,7 @@ onMounted(() => {
                 <Button
                     raised
                     type="submit"
-                    :loading="form.processing"
+                    :loading="loading"
                     label="Log In"
                     severity="contrast"
                 />

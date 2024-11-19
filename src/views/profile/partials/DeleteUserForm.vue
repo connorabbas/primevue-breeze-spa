@@ -1,9 +1,9 @@
 <script setup>
 import { ref, useTemplateRef, reactive } from 'vue';
-import { useErrorHandling } from '@/composables/useErrorHandling';
+import { useAxiosErrorHandling } from '@/composables/useAxiosErrorHandling';
 import InputErrors from '@/components/InputErrors.vue';
 
-const { errors, handleAxiosError, clearErrors, hasNoErrors } = useErrorHandling();
+const { validationErrors } = useAxiosErrorHandling();
 
 const passwordInput = useTemplateRef('password-input');
 const modalOpen = ref(false);
@@ -53,11 +53,11 @@ function focusPasswordInput() {
                     placeholder="Password"
                     v-model="form.data.password"
                     class="w-full"
-                    :invalid="Boolean(errors.validation?.password)"
+                    :invalid="Boolean(validationErrors?.password)"
                     autocomplete="current-password"
                     @keyup.enter="deleteUser"
                 />
-                <InputErrors :errors="errors.validation?.password" />
+                <InputErrors :errors="validationErrors?.password" />
             </div>
 
             <template #footer>
