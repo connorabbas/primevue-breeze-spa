@@ -1,23 +1,35 @@
 <script setup>
 import { ref, useTemplateRef, reactive } from 'vue';
-import { useAxiosErrorHandling } from '@/composables/useAxiosErrorHandling';
+import router from '@/router';
+import { useAxiosForm } from '@/composables/useAxiosForm';
+import { useFlashMessage } from '@/composables/useFlashMessage.js';
 import InputErrors from '@/components/InputErrors.vue';
 
-const { validationErrors } = useAxiosErrorHandling();
+const { setFlashMessage } = useFlashMessage();
 
 const passwordInput = useTemplateRef('password-input');
 const modalOpen = ref(false);
 
-const form = reactive({
-    processing: false,
-    data: {
-        password: '',
-    },
+const {
+    data: formData,
+    validationErrors,
+    processing: deleting,
+    del: submitForm,
+    reset: resetFormFields,
+} = useAxiosForm({
+    password: '',
 });
-
-const deleteUser = () => {
-    // Breeze API installation does not include profile related routes/functionality, implement as needed...
-    modalOpen.value = false;
+const deleteAccount = () => {
+    submitForm('/profile', {
+        onSuccess: () => {
+            modalOpen.value = false;
+            router.push({ name: 'dashboard' }).then(() => {
+                setFlashMessage('success', 'Your account has been deleted.');
+            });
+        },
+        onError: () => passwordInput.value.$el.focus(),
+        onFinish: () => resetFormFields(),
+    });
 };
 
 function focusPasswordInput() {
@@ -51,11 +63,11 @@ function focusPasswordInput() {
                     ref="password-input"
                     type="password"
                     placeholder="Password"
-                    v-model="form.data.password"
+                    v-model="formData.password"
                     class="w-full"
                     :invalid="Boolean(validationErrors?.password)"
                     autocomplete="current-password"
-                    @keyup.enter="deleteUser"
+                    @keyup.enter="deleteAccount"
                 />
                 <InputErrors :errors="validationErrors?.password" />
             </div>
@@ -70,8 +82,8 @@ function focusPasswordInput() {
                 />
                 <Button
                     raised
-                    @click="deleteUser"
-                    :loading="form.processing"
+                    @click="deleteAccount"
+                    :loading="deleting"
                     label="Delete Account"
                     severity="danger"
                 />

@@ -10,6 +10,8 @@ import InputErrors from '@/components/InputErrors.vue';
 const authStore = useAuthStore();
 const { flashMessages } = useFlashMessage();
 
+const emailInput = useTemplateRef('email-input');
+
 const {
     data: formData,
     validationErrors,
@@ -43,7 +45,6 @@ const loading = computed(() => {
     return loggingIn.value || authStore.fetchingCsrfToken.value;
 });
 
-const emailInput = useTemplateRef('email-input');
 onMounted(() => {
     emailInput.value.$el.focus();
 });

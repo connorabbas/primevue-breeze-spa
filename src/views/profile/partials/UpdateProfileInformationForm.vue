@@ -10,6 +10,8 @@ const toast = useToast();
 const authStore = useAuthStore();
 const { flashMessages } = useFlashMessage();
 
+const nameInput = useTemplateRef('name-input');
+
 const verificationLinkSent = computed(() => flashMessages.success === 'verification-link-sent');
 
 const {
@@ -39,7 +41,6 @@ const resendVerifyEmail = () => {
     authStore.sendVerificationEmail();
 };
 
-const nameInput = useTemplateRef('name-input');
 onMounted(() => {
     nameInput.value.$el.focus();
 });
