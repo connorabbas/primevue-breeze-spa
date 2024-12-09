@@ -5,7 +5,7 @@
         "../docker-compose.local.yml"
     ],
     "service": "web",
-    "workspaceFolder": "/web",
+    "workspaceFolder": "/workspace",
     "mounts": [
         "type=bind,source=/home/${localEnv:USER}/.ssh,target=/home/node/.ssh,readonly"
     ],
@@ -27,7 +27,7 @@
             }
         }
     },
-    "postCreateCommand": "chown -R 1000:1000 /web && npm install",
+    "postCreateCommand": "chown -R 1000:1000 /workspace && npm install",
     "remoteUser": "node"
     // "forwardPorts": [],
     // "runServices": [],

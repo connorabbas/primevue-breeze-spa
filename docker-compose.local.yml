@@ -5,9 +5,9 @@ services:
       dockerfile: Dockerfile.local
     container_name: vue-spa
     entrypoint: /bin/sh
-    working_dir: /web
+    working_dir: /workspace
     volumes:
-      - '.:/web'
+      - '.:/workspace'
     tty: true
     labels:
       - "traefik.enable=true"
