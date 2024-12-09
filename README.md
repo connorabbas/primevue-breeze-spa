@@ -10,12 +10,12 @@ An alternative to using my [Inertia](https://github.com/connorabbas/primevue-bre
 4. Install [Laravel Breeze](https://laravel.com/docs/master/starter-kits#laravel-breeze-installation) using the [API Stack](https://laravel.com/docs/master/starter-kits#breeze-and-next) option
 5. Setup necessary `.env` configuration values in the Laravel API project
     ```
+    # Example implementation
     # Remember, your SPA and API must share the same top-level domain
-    # Example implementation, could also use localhost with different port numbers
-    APP_URL="http://breeze-api.localhost" # Match this value with VITE_API_BASE_URL in the Vue app
-    FRONTEND_URL="http://vue-spa.breeze-api.localhost" # Add app.frontend_url config entry as needed
-    SANCTUM_STATEFUL_DOMAINS="vue-spa.breeze-api.localhost"
-    SESSION_DOMAIN=".breeze-api.localhost"
+    APP_URL=http://api.vue-spa.localhost # Match this value with VITE_API_BASE_URL in the Vue app
+    FRONTEND_URL=http://vue-spa.localhost # Add app.frontend_url config entry as needed
+    SANCTUM_STATEFUL_DOMAINS="vue-spa.localhost"
+    SESSION_DOMAIN="vue-spa.localhost"
     ```
 6. Setup additional routes and controllers for profile page in the Laravel API project:
     ```
