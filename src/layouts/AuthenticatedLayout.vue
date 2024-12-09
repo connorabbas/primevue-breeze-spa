@@ -110,11 +110,6 @@ watchEffect(() => {
                                         text
                                         severity="secondary"
                                         rounded
-                                        :pt="{
-                                            icon: {
-                                                class: 'text-muted-color',
-                                            },
-                                        }"
                                     />
                                 </div>
                                 <!-- User Dropdown Menu -->
@@ -122,11 +117,11 @@ watchEffect(() => {
                                     <Button
                                         text
                                         severity="secondary"
+                                        :label="authStore?.user?.name"
+                                        icon="pi pi-angle-down"
+                                        iconPos="right"
                                         @click="toggleUserMenu($event)"
-                                    >
-                                        <span class="text-muted-color">{{ authStore?.user?.name }}</span>
-                                        <i class="pi pi-angle-down text-muted-color"></i>
-                                    </Button>
+                                    />
                                     <div
                                         id="user-menu-append"
                                         class="relative"
